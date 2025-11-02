@@ -12,6 +12,7 @@ using Content.Shared._HL.Rescue.Rescue;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Content.Shared.Implants.Components;
+using Content.Server.Radio.EntitySystems;
 
 namespace Content.Server._NF.Implants;
 
@@ -26,6 +27,7 @@ public sealed class MedicalTeleportImplantSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _xform = default!;
     [Dependency] private readonly SharedContainerSystem _containers = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly RadioSystem _radio = default!;
 
     public override void Initialize()
     {
@@ -36,7 +38,8 @@ public sealed class MedicalTeleportImplantSystem : EntitySystem
         // Cleanup: if the implant gets removed, ensure any pending extraction is canceled.
         SubscribeLocalEvent<MedicalTeleportImplantComponent, EntGotRemovedFromContainerMessage>(OnImplantRemoved, before: [typeof(SubdermalImplantSystem)]);
 
-        // Note: Do not subscribe to FultonedComponent shutdown here to avoid duplicate subscription with FultonSystem.
+        // Notify medical comms upon completion of a rescue (post-teleport) when the beacon is a RescueBeacon.
+        SubscribeLocalEvent<FultonedComponent, ComponentShutdown>(OnFultonedShutdown);
     }
 
     private void OnImplantRemoved(EntityUid uid, MedicalTeleportImplantComponent comp, EntGotRemovedFromContainerMessage args)
@@ -118,6 +121,24 @@ public sealed class MedicalTeleportImplantSystem : EntitySystem
 
         // Set cooldown at scheduling time; if teleport is canceled by revival, we reset it above
         comp.NextAllowedTeleport = _timing.CurTime + comp.TeleportCooldown;
+    }
+
+    private void OnFultonedShutdown(EntityUid uid, FultonedComponent comp, ComponentShutdown args)
+    {
+        // Only act if this was a rescue extraction that actually completed.
+        if (comp.Beacon == null)
+            return;
+
+        // Ensure we're past the scheduled time (i.e., not an early removal/cancel).
+        if (_timing.CurTime < comp.NextFulton)
+            return;
+
+        if (TryComp(comp.Beacon.Value, out RescueBeaconComponent _))
+        {
+
+            // Broadcast to medical channel now that the entity is at the beacon
+            _radio.SendRadioMessage(uid, "Vfib signal recieved, patient unresponsive, rescue extraction en route, Medical personel requested in trauma bay immediately", "Medical", uid);
+        }
     }
 
     private EntityUid? FindNearestBeacon(EntityUid owner)

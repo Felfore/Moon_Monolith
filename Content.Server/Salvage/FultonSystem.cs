@@ -78,31 +78,6 @@ public sealed class FultonSystem : SharedFultonSystem
                 Entity = GetNetEntity(uid, metadata),
                 Coordinates = GetNetCoordinates(oldCoords),
             });
-
-            // If this fulton was a medical rescue to a rescue beacon, notify medical channel and stop flatline.
-            if (component.Beacon != null && TryComp(component.Beacon.Value, out RescueBeaconComponent _))
-            {
-                if (TryComp<ImplantedComponent>(uid, out _) &&
-                    Container.TryGetContainer(uid, ImplanterComponent.ImplantSlotId, out var implantContainer))
-                {
-                    foreach (var implant in implantContainer.ContainedEntities)
-                    {
-                        if (!TryComp<MedicalTeleportImplantComponent>(implant, out var med))
-                            continue;
-
-                        // Stop any ongoing flatline sound
-                        if (med.FlatlineStream != null)
-                        {
-                            Audio.Stop(med.FlatlineStream);
-                            med.FlatlineStream = null;
-                        }
-
-                        // Broadcast to medical comms on station (now that entity is at beacon map)
-                        _radio.SendRadioMessage(uid, "Vfib signal recieved, patient unresponsive, rescue extraction en route, Medical personel requested in trauma bay immediately", "Medical", uid);
-                        break;
-                    }
-                }
-            }
         }
 
         Audio.PlayPvs(component.Sound, uid);
