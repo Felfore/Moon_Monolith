@@ -133,9 +133,8 @@ public sealed class MedicalTeleportImplantSystem : EntitySystem
         if (_timing.CurTime < comp.NextFulton)
             return;
 
-        if (TryComp(comp.Beacon.Value, out RescueBeaconComponent _))
+        if (HasComp<RescueBeaconComponent>(comp.Beacon.Value))
         {
-
             // Broadcast to medical channel now that the entity is at the beacon
             _radio.SendRadioMessage(uid, "Vfib signal recieved, patient unresponsive, rescue extraction en route, Medical personel requested in trauma bay immediately", "Medical", uid);
         }
