@@ -13,6 +13,8 @@ using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Content.Shared.Implants.Components;
 using Content.Server.Radio.EntitySystems;
+using System.Collections.Generic;
+using System.Threading;
 
 namespace Content.Server._NF.Implants;
 
@@ -38,9 +40,12 @@ public sealed class MedicalTeleportImplantSystem : EntitySystem
         // Cleanup: if the implant gets removed, ensure any pending extraction is canceled.
         SubscribeLocalEvent<MedicalTeleportImplantComponent, EntGotRemovedFromContainerMessage>(OnImplantRemoved, before: [typeof(SubdermalImplantSystem)]);
 
-        // Notify medical comms upon completion of a rescue (post-teleport) when the beacon is a RescueBeacon.
-        SubscribeLocalEvent<FultonedComponent, ComponentShutdown>(OnFultonedShutdown);
+        // Do not subscribe to FultonedComponent shutdown here; FultonSystem already does and directed
+        // subscriptions must be unique per component/event. We'll schedule our own timer on fulton.
     }
+
+    // Track pending arrival announcements so they can be canceled on revival/removal.
+    private readonly Dictionary<EntityUid, CancellationTokenSource> _pendingArrivals = new();
 
     private void OnImplantRemoved(EntityUid uid, MedicalTeleportImplantComponent comp, EntGotRemovedFromContainerMessage args)
     {
@@ -49,6 +54,12 @@ public sealed class MedicalTeleportImplantSystem : EntitySystem
             return;
 
         var owner = implanted.ImplantedEntity.Value;
+        // Cancel any pending arrival announcement for this owner
+        if (_pendingArrivals.Remove(owner, out var removedCts))
+        {
+            removedCts.Cancel();
+            removedCts.Dispose();
+        }
         // stop flatline if playing
         if (comp.FlatlineStream != null)
         {
@@ -78,6 +89,13 @@ public sealed class MedicalTeleportImplantSystem : EntitySystem
             }
             if (HasComp<FultonedComponent>(owner))
                 RemComp<FultonedComponent>(owner);
+
+            // Cancel pending arrival announcement if any
+            if (_pendingArrivals.Remove(owner, out var cts))
+            {
+                cts.Cancel();
+                cts.Dispose();
+            }
 
             // Clear cooldown since teleport did not occur
             comp.NextAllowedTeleport = _timing.CurTime;
@@ -121,23 +139,48 @@ public sealed class MedicalTeleportImplantSystem : EntitySystem
 
         // Set cooldown at scheduling time; if teleport is canceled by revival, we reset it above
         comp.NextAllowedTeleport = _timing.CurTime + comp.TeleportCooldown;
-    }
 
-    private void OnFultonedShutdown(EntityUid uid, FultonedComponent comp, ComponentShutdown args)
-    {
-        // Only act if this was a rescue extraction that actually completed.
-        if (comp.Beacon == null)
-            return;
-
-        // Ensure we're past the scheduled time (i.e., not an early removal/cancel).
-        if (_timing.CurTime < comp.NextFulton)
-            return;
-
-        if (HasComp<RescueBeaconComponent>(comp.Beacon.Value))
+        // Schedule a post-arrival announcement slightly after the expected teleport time.
+        if (_pendingArrivals.Remove(owner, out var oldCts))
         {
-            // Broadcast to medical channel now that the entity is at the beacon
-            _radio.SendRadioMessage(uid, "Vfib signal recieved, patient unresponsive, rescue extraction en route, Medical personel requested in trauma bay immediately", "Medical", uid);
+            oldCts.Cancel();
+            oldCts.Dispose();
         }
+        var newCts = new CancellationTokenSource();
+        _pendingArrivals[owner] = newCts;
+        var scheduledBeacon = beacon.Value;
+        Robust.Shared.Timing.Timer.Spawn(comp.TeleportDelay + TimeSpan.FromMilliseconds(50), () =>
+        {
+            if (newCts.IsCancellationRequested || Deleted(owner))
+                return;
+
+            // Only announce for rescue beacons.
+            if (!HasComp<RescueBeaconComponent>(scheduledBeacon))
+                return;
+
+            // Stop flatline sound if an implant is present on the owner.
+            if (_containers.TryGetContainer(owner, ImplanterComponent.ImplantSlotId, out var implantContainer))
+            {
+                foreach (var implantEnt in implantContainer.ContainedEntities)
+                {
+                    if (!HasComp<MedicalTeleportImplantComponent>(implantEnt))
+                        continue;
+
+                    var med = Comp<MedicalTeleportImplantComponent>(implantEnt);
+                    if (med.FlatlineStream != null)
+                    {
+                        _audio.Stop(med.FlatlineStream);
+                        med.FlatlineStream = null;
+                    }
+                    break;
+                }
+            }
+
+            _radio.SendRadioMessage(owner, "Vfib signal recieved, patient unresponsive, rescue extraction en route, Medical personel requested in trauma bay immediately", "Medical", owner);
+
+            if (_pendingArrivals.Remove(owner, out var usedCts))
+                usedCts.Dispose();
+        }, newCts.Token);
     }
 
     private EntityUid? FindNearestBeacon(EntityUid owner)
