@@ -27,6 +27,7 @@
   - type: Tag
     tags:
     - Meat
+    - Trash
 
 - type: entity
   id: BaseProtogenOrgan
