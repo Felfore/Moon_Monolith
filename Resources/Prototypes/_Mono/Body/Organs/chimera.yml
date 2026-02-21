@@ -26,7 +26,6 @@
           Quantity: 5
   - type: Tag
     tags:
-    - Meat
     - Trash #moonstation
 
 - type: entity
