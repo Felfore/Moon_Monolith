@@ -25,6 +25,9 @@
   - type: FlavorProfile
     flavors:
     - people
+  - type: Tag
+    tags:
+    - Trash #moonstation
 
 - type: entity
   id: OrganDionaBrain
