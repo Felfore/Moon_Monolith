@@ -27,7 +27,7 @@
   - type: Tag
     tags:
     - Meat
-    - Trash
+    - Trash #moonstation
 
 - type: entity
   id: BaseProtogenOrgan
