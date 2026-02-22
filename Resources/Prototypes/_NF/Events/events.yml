@@ -386,7 +386,7 @@
     - Ussp # Mono
     # - UsspCommand # Mono
     extraCount: 6
-    lightBreakChancePerSecond: 0.0003
+    lightBreakChancePerSecond: 0 # moonstation
     doorToggleChancePerSecond: 0 # Mono
 
 - type: entity
