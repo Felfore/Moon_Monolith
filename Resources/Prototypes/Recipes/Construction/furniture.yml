@@ -613,6 +613,40 @@
   conditions:
     - !type:TileNotBlocked
 
+  - type: construction # Moonstation
+  name: sink
+  id: Sink
+  graph: Sink
+  startNode: start
+  targetNode: sink
+  category: construction-category-furniture
+  description: A sink with a tap for water.
+  icon:
+    sprite: Structures/Furniture/sink.rsi
+    state: sink
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+    - type: construction # Moonstation
+  name: drain
+  id: FloorDrain
+  graph: FloorDrain
+  startNode: start
+  targetNode: drain
+  category: construction-category-furniture
+  description: A drain on the floor.
+  icon:
+    sprite: Objects/Specific/Janitorial/drain.rsi
+    state: icon
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
 #bedroom
 - type: construction
   id: Bed
