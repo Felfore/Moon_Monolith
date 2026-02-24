@@ -1,0 +1,25 @@
+- type: constructionGraph
+  id: Sink
+  start: start
+  graph:
+    - node: start
+      edges:
+        - to: sink
+          completed:
+            - !type:SnapToGrid { }
+          steps:
+            - material: Steel
+              amount: 5
+              doAfter: 1
+    - node: sink
+      entity: Sink
+      edges:
+        - to: start
+          completed:
+            - !type:SpawnPrototype
+              prototype: SheetSteel1
+              amount: 5
+            - !type:DestroyEntity {}
+          steps:
+            - tool: Welding
+              doAfter: 2
