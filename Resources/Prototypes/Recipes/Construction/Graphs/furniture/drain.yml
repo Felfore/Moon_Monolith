@@ -1,0 +1,25 @@
+- type: constructionGraph
+  id: FloorDrain
+  start: start
+  graph:
+    - node: start
+      edges:
+        - to: drain
+          completed:
+            - !type:SnapToGrid { }
+          steps:
+            - material: Steel
+              amount: 5
+              doAfter: 1
+    - node: drain
+      entity: FloorDrain
+      edges:
+        - to: start
+          completed:
+            - !type:SpawnPrototype
+              prototype: SheetSteel1
+              amount: 5
+            - !type:DestroyEntity {}
+          steps:
+            - tool: Welding
+              doAfter: 2
