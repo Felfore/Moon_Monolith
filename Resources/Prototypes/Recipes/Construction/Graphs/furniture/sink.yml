@@ -3,10 +3,12 @@
   start: start
   graph:
     - node: start
+      actions:
+        - !type:DestroyEntity {}
       edges:
         - to: sink
           completed:
-            - !type:SnapToGrid { }
+            - !type:SnapToGrid {}
           steps:
             - material: Steel
               amount: 5
@@ -19,7 +21,6 @@
             - !type:SpawnPrototype
               prototype: SheetSteel1
               amount: 5
-            - !type:DestroyEntity {}
           steps:
             - tool: Welding
               doAfter: 2
