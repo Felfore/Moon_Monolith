@@ -27,6 +27,7 @@
   - type: Sprite
     sprite: _NF/Structures/Doors/Airlocks/Glass/mercenary.rsi
   - type: PaintableAirlock
+    department: null
     group: Glass
   - type: Wires
     layoutId: AirlockSecurity
