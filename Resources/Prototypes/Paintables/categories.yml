@@ -1,0 +1,5 @@
+- type: paintableGroupCategory
+  id: Airlocks
+  groups:
+  - AirlockStandard
+  - AirlockGlass
