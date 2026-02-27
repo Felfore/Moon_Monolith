@@ -11,13 +11,13 @@
     - id: CockroachMigration
     - id: GasLeak
     #- id: GreytideVirus
-    - id: IonStorm # its calm like 90% of the time smh
+#    - id: IonStorm # its calm like 90% of the time smh
     # - id: KudzuGrowth
     # - id: MassHallucinations # Frontier
     # - id: MimicVendorRule
     - id: MouseMigration
     # - id: PowerGridCheck
-    - id: RandomSentience
+#    - id: RandomSentience
     # - id: SlimesSpawn
     - id: SolarFlare
     # - id: SnakeSpawn
@@ -29,7 +29,7 @@
     - id: BluespaceSyndicateCrate # Frontier
 #   - id: BluespaceBrokenMcDelivery # Frontier. Mono edit - Disabled
     - id: SmugglingFax # Frontier
-    - id: SnailMigration # Mono
+#    - id: SnailMigration # Mono
 
 # Frontier: not used!
 - type: entityTable
