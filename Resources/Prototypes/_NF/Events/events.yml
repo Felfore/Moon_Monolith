@@ -403,23 +403,23 @@
     duration: 60
   - type: VentClogRule
 
-# Mono Event
-- type: entity
-  id: BorerSpawn
-  parent: BaseStationEventShortDelay
-  components:
-  - type: StationEvent
-    startAnnouncement: station-event-vent-creatures-nf-start-announcement
-    startAudio:
-      path: /Audio/Announcements/attention.ogg
-    earliestStart: 20
-    minimumPlayers: 15
-    weight: 5
-    duration: 60
-  - type: VentCrittersRule
-    entries:
-    - id: MobCorticalBorer
-      prob: 0.5
+# # Mono Event
+# - type: entity
+#   id: BorerSpawn
+#   parent: BaseStationEventShortDelay
+#   components:
+#   - type: StationEvent
+#     startAnnouncement: station-event-vent-creatures-nf-start-announcement
+#     startAudio:
+#       path: /Audio/Announcements/attention.ogg
+#     earliestStart: 20
+#     minimumPlayers: 15
+#     weight: 5
+#     duration: 60
+#   - type: VentCrittersRule
+#     entries:
+#     - id: MobCorticalBorer
+#       prob: 0.5
 
 # - type: entity
 #   id: SnakeSpawn
