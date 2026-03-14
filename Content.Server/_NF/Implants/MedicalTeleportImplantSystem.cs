@@ -317,14 +317,15 @@ public sealed class MedicalTeleportImplantSystem : EntitySystem
             var speciesText = $"";
             if (TryComp<HumanoidAppearanceComponent>(owner, out var species))
                 speciesText = $" ({species!.Species})";
-            var teleportMessage = Loc.GetString(comp.TeleportMessage, ("user", owner), ("specie", speciesText), ("delaySeconds", 0));
+            var teleportMessage = Loc.GetString("medical-teleport-implant-emergency-teleport-message", ("user", owner), ("specie", speciesText));
             _radio.SendRadioMessage(implantUid.Value, teleportMessage, _prototypeManager.Index(comp.RadioChannel), implantUid.Value);
 
-            // Apply ~400 random Blunt/Heat damage so they arrive in crit/dead
+            // Apply 150-275 random damage split between Blunt and Heat so they arrive in crit/dead
             if (TryComp<Content.Shared.Damage.DamageableComponent>(owner, out var damageable))
             {
-                var bluntDamage = _random.Next(150, 250);
-                var heatDamage = 400 - bluntDamage;
+                var totalDamage = _random.Next(150, 275);
+                var bluntDamage = _random.Next(0, totalDamage);
+                var heatDamage = totalDamage - bluntDamage;
 
                 var damageSpec = new Content.Shared.Damage.DamageSpecifier();
                 damageSpec.DamageDict.Add("Blunt", Content.Shared.FixedPoint.FixedPoint2.New(bluntDamage));
