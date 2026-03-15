@@ -28,7 +28,6 @@ public abstract class SharedCryostorageSystem : EntitySystem
     protected EntityUid? PausedMap { get; private set; }
 
     protected bool CryoSleepRejoiningEnabled;
-    protected bool CryoPersistentStorageEnabled;
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -45,17 +44,11 @@ public abstract class SharedCryostorageSystem : EntitySystem
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
 
         Subs.CVar(_configuration, CCVars.GameCryoSleepRejoining, OnCvarChanged, true);
-        Subs.CVar(_configuration, CCVars.GameCryoPersistentStorage, OnPersistentStorageCvarChanged, true);
     }
 
     private void OnCvarChanged(bool value)
     {
         CryoSleepRejoiningEnabled = value;
-    }
-
-    private void OnPersistentStorageCvarChanged(bool value)
-    {
-        CryoPersistentStorageEnabled = value;
     }
 
     protected virtual void OnInsertedContainer(Entity<CryostorageComponent> ent, ref EntInsertedIntoContainerMessage args)

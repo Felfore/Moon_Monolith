@@ -177,7 +177,7 @@ public sealed class CryostorageSystem : SharedCryostorageSystem
             return;
 
         // if we have a session, we use that to add back in all the job slots the player had.
-        if (userId != null && !CryoPersistentStorageEnabled)
+        if (userId != null)
         {
             foreach (var uniqueStation in _station.GetStationsSet())
             {
@@ -205,7 +205,7 @@ public sealed class CryostorageSystem : SharedCryostorageSystem
             return;
         }
 
-        if ((!CryoSleepRejoiningEnabled && !CryoPersistentStorageEnabled) || !comp.AllowReEnteringBody)
+        if (!CryoSleepRejoiningEnabled || !comp.AllowReEnteringBody)
         {
             if (userId != null && Mind.TryGetMind(userId.Value, out var mind) &&
                 HasComp<CryostorageContainedComponent>(mind.Value.Comp.CurrentEntity))
@@ -214,19 +214,12 @@ public sealed class CryostorageSystem : SharedCryostorageSystem
             }
         }
 
-        if (CryoPersistentStorageEnabled)
-            comp.AllowReEnteringBody = true;
-        else
-            comp.AllowReEnteringBody = false;
-
+        comp.AllowReEnteringBody = false;
         _transform.SetParent(ent, PausedMap.Value);
         cryostorageComponent.StoredPlayers.Add(ent);
         Dirty(ent, comp);
         UpdateCryostorageUIState((cryostorageEnt.Value, cryostorageComponent));
         AdminLog.Add(LogType.Action, LogImpact.High, $"{ToPrettyString(ent):player} was entered into cryostorage inside of {ToPrettyString(cryostorageEnt.Value)}");
-
-        if (CryoPersistentStorageEnabled)
-            return;
 
         if (!TryComp<StationRecordsComponent>(station, out var stationRecords))
             return;
@@ -256,7 +249,7 @@ public sealed class CryostorageSystem : SharedCryostorageSystem
     private void HandleCryostorageReconnection(Entity<CryostorageContainedComponent> entity)
     {
         var (uid, comp) = entity;
-        if ((!CryoSleepRejoiningEnabled && !CryoPersistentStorageEnabled) || !IsInPausedMap(uid))
+        if (!CryoSleepRejoiningEnabled || !IsInPausedMap(uid))
             return;
 
         // how did you destroy these? they're indestructible.
@@ -291,7 +284,7 @@ public sealed class CryostorageSystem : SharedCryostorageSystem
 
         base.OnInsertedContainer(ent, ref args);
 
-        var locKey = (CryoSleepRejoiningEnabled || CryoPersistentStorageEnabled)
+        var locKey = CryoSleepRejoiningEnabled
             ? "cryostorage-insert-message-temp"
             : "cryostorage-insert-message-permanent";
 
