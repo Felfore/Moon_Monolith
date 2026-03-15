@@ -18276,3 +18276,10 @@ Entries:
   id: 2016
   time: '2026-03-15T14:19:46.0000000+00:00'
   url: https://github.com/Monolith-Station/Monolith/pull/3450
+- author: DevArchwave
+  changes:
+    - type: Tweak
+      message: The durability of armor plates can now be examined directly.
+  id: 2017
+  time: '2026-03-15T19:36:04.0000000+00:00'
+  url: https://github.com/Monolith-Station/Monolith/pull/3436
