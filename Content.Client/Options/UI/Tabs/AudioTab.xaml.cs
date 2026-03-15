@@ -9,6 +9,8 @@ using Robust.Client.UserInterface.XAML;
 using Robust.Shared;
 using Robust.Shared.Configuration;
 
+using Content.Shared._Goobstation.CCVars;
+
 namespace Content.Client.Options.UI.Tabs;
 
 [GenerateTypedNameReferences]
@@ -53,6 +55,13 @@ public sealed partial class AudioTab : Control
             CCVars.InterfaceVolume,
             SliderVolumeInterface,
             scale: ContentAudioSystem.InterfaceMultiplier);
+
+        Control.AddOptionPercentSlider( // Goobstation - TTS
+            GoobCVars.TTSVolume,
+            SliderVolumeTTS,
+            scale: ContentAudioSystem.TTSMultiplier
+        );
+
 
         Control.AddOptionSlider(
             CCVars.MaxAmbientSources,

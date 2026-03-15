@@ -31,6 +31,8 @@ public sealed partial class ContentAudioSystem : SharedContentAudioSystem
     public const float InterfaceMultiplier = 2f;
     public const float CombatMultiplier = 3f; //Mono
 
+    public const float TTSMultiplier = 4f; // Mooncord
+
     public override void Initialize()
     {
         base.Initialize();

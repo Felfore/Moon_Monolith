@@ -6,6 +6,9 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
 
+using Content.Shared.Preferences;
+using Content.Shared.TTS;
+
 namespace Content.Shared.Humanoid;
 
 [NetworkedComponent, RegisterComponent, AutoGenerateComponentState(true)]
@@ -45,6 +48,15 @@ public sealed partial class HumanoidAppearanceComponent : Component
     /// </summary>
     [DataField(required: true), AutoNetworkedField]
     public ProtoId<SpeciesPrototype> Species { get; set; }
+
+    // TTS-Start
+    /// <summary>
+    ///     Current voice. Used for correct cloning.
+    /// </summary>
+    [DataField("voice")]
+    public ProtoId<TTSVoicePrototype> Voice { get; set; } = SharedHumanoidAppearanceSystem.DefaultVoice;
+    // TTS-End
+
 
     /// <summary>
     ///     The initial profile and base layers to apply to this humanoid.
