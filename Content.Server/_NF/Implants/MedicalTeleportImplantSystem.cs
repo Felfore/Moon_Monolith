@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Threading;
 using YamlDotNet.Serialization;
+using Robust.Shared.Random;
 
 namespace Content.Server._NF.Implants;
 
@@ -34,6 +35,10 @@ public sealed class MedicalTeleportImplantSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly RadioSystem _radio = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+// #Moonolith addition start
+    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly Content.Shared.Damage.DamageableSystem _damageable = default!;
+// #Moonolith addition end
 
     public override void Initialize()
     {
@@ -249,4 +254,105 @@ public sealed class MedicalTeleportImplantSystem : EntitySystem
 
         return best;
     }
+
+    // Moonolith addition start
+    /// <summary>
+    /// Instantly teleports the owner to the nearest active rescue beacon, bypassing all timers.
+    /// Also applies ~400 total random Blunt and Heat damage.
+    /// Used when an expedition map is about to be deleted.
+    /// </summary>
+    public bool TriggerEmergencyTeleport(EntityUid owner)
+    {
+        Log.Warning($"Triggering emergency teleport for {owner}");
+
+        // Must have the implant to trigger this
+        if (!_containers.TryGetContainer(owner, ImplanterComponent.ImplantSlotId, out var implantContainer))
+        {
+            Log.Warning($"Failed to find ImplantSlotId container on {owner}");
+            return false;
+        }
+
+        EntityUid? implantUid = null;
+        MedicalTeleportImplantComponent? comp = null;
+
+        foreach (var implantEnt in implantContainer.ContainedEntities)
+        {
+            if (TryComp(implantEnt, out comp))
+            {
+                implantUid = implantEnt;
+                break;
+            }
+        }
+
+        if (implantUid == null || comp == null)
+        {
+            Log.Warning($"Failed to find MedicalTeleportImplantComponent inside implant container on {owner}");
+            return false;
+        }
+
+        var beacon = FindNearestBeacon(owner);
+        if (beacon == null)
+        {
+            Log.Warning($"Failed to find any active rescue beacon for {owner}");
+            return false;
+        }
+
+        if (TryComp(beacon.Value, out TransformComponent? beaconXform))
+        {
+            var metadata = MetaData(owner);
+            var oldCoords = Transform(owner).Coordinates;
+            var offset = _random.NextVector2(1.5f);
+            var localPos = Vector2.Transform(
+                    _xform.GetWorldPosition(beaconXform),
+                    _xform.GetInvWorldMatrix(beaconXform.ParentUid)) + offset;
+
+            _xform.SetCoordinates(owner, new EntityCoordinates(beaconXform.ParentUid, localPos));
+
+            // We cannot raise the FultonAnimationMessage here because it is protected in SharedFultonSystem.
+            // Since this is an emergency teleport right before a map explodes, it is okay to skip the visual effect.
+
+            _audio.PlayPvs(comp.TeleportSound, owner);
+
+            // Announce
+            var speciesText = $"";
+            if (TryComp<HumanoidAppearanceComponent>(owner, out var species))
+                speciesText = $" ({species!.Species})";
+            var teleportMessage = Loc.GetString("medical-teleport-implant-emergency-teleport-message", ("user", owner), ("specie", speciesText));
+            _radio.SendRadioMessage(implantUid.Value, teleportMessage, _prototypeManager.Index(comp.RadioChannel), implantUid.Value);
+
+            // Apply 150-275 random damage split between Blunt and Heat so they arrive in crit/dead
+            if (TryComp<Content.Shared.Damage.DamageableComponent>(owner, out var damageable))
+            {
+                var totalDamage = _random.Next(150, 275);
+                var bluntDamage = _random.Next(0, totalDamage);
+                var heatDamage = totalDamage - bluntDamage;
+
+                var damageSpec = new Content.Shared.Damage.DamageSpecifier();
+                damageSpec.DamageDict.Add("Blunt", Content.Shared.FixedPoint.FixedPoint2.New(bluntDamage));
+                damageSpec.DamageDict.Add("Heat", Content.Shared.FixedPoint.FixedPoint2.New(heatDamage));
+
+                _damageable.TryChangeDamage(owner, damageSpec, true, damageable: damageable);
+            }
+
+            // Cleanup any pending fulton
+            if (_pendingActions.Remove(owner, out var cts))
+            {
+                cts.Cancel();
+                cts.Dispose();
+            }
+
+            if (comp.FlatlineStream != null)
+            {
+                _audio.Stop(comp.FlatlineStream);
+                comp.FlatlineStream = null;
+            }
+
+            RemCompDeferred<FultonedComponent>(owner);
+
+            return true;
+        }
+
+        return false;
+    }
+    // Moonolith addition end
 }

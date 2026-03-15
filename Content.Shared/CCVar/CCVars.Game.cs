@@ -1,4 +1,4 @@
-﻿using Content.Shared.Roles;
+using Content.Shared.Roles;
 using Robust.Shared.Configuration;
 
 namespace Content.Shared.CCVar;
@@ -136,6 +136,12 @@ public sealed partial class CCVars
     /// </summary>
     public static readonly CVarDef<bool>
         GameCryoSleepRejoining = CVarDef.Create("game.cryo_sleep_rejoining", false, CVar.SERVER | CVar.REPLICATED);
+
+    /// <summary>
+    ///     Whether or not players safely stored in cryosleep aren't round-removed, allowing them to reconnect with their jobs and station records intact.
+    /// </summary>
+    public static readonly CVarDef<bool>
+        GameCryoPersistentStorage = CVarDef.Create("game.cryo_persistent_storage", true, CVar.SERVER | CVar.REPLICATED);
 
     /// <summary>
     ///     When enabled, guests will be assigned permanent UIDs and will have their preferences stored.
