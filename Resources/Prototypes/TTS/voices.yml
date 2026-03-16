@@ -1,139 +1,167 @@
 - type: ttsVoice
   id: Abigail
   name: Abigail
+  model: turbo
   sex: Female
 
 - type: ttsVoice
   id: Adrian
   name: Adrian
+  model: turbo
   sex: Male
 
 - type: ttsVoice
   id: Alexander
   name: Alexander
+  model: turbo
   sex: Male
 
 - type: ttsVoice
   id: Alice
   name: Alice
+  model: turbo
   sex: Female
 
 - type: ttsVoice
   id: Austin
   name: Austin
+  model: turbo
   sex: Male
 
 - type: ttsVoice
   id: Axel
   name: Axel
+  model: turbo
   sex: Male
 
 - type: ttsVoice
   id: Connor
   name: Connor
+  model: turbo
   sex: Male
 
 - type: ttsVoice
   id: Cora
   name: Cora
+  model: turbo
   sex: Female
 
 - type: ttsVoice
   id: Elena
   name: Elena
+  model: turbo
   sex: Female
 
 - type: ttsVoice
   id: Eli
   name: Eli
+  model: turbo
   sex: Male
 
 - type: ttsVoice
   id: Emily
   name: Emily
+  model: turbo
   sex: Female
 
 - type: ttsVoice
   id: Everett
   name: Everett
+  model: turbo
   sex: Male
 
 - type: ttsVoice
   id: Gabriel
   name: Gabriel
+  model: turbo
   sex: Male
 
 - type: ttsVoice
   id: Gianna
   name: Gianna
+  model: turbo
   sex: Female
 
 - type: ttsVoice
   id: Henry
   name: Henry
+  model: turbo
   sex: Male
 
 - type: ttsVoice
   id: Ian
   name: Ian
+  model: turbo
   sex: Male
 
 - type: ttsVoice
   id: Jade
   name: Jade
+  model: turbo
   sex: Female
 
 - type: ttsVoice
   id: Jeremiah
   name: Jeremiah
+  model: turbo
   sex: Male
 
 - type: ttsVoice
   id: Jordan
   name: Jordan
+  model: turbo
   sex: Female
 
 - type: ttsVoice
   id: Julian
   name: Julian
+  model: turbo
   sex: Male
 
 - type: ttsVoice
   id: Layla
   name: Layla
+  model: turbo
   sex: Female
 
 - type: ttsVoice
   id: Leonardo
   name: Leonardo
+  model: turbo
   sex: Male
 
 - type: ttsVoice
   id: Michael
   name: Michael
+  model: turbo
   sex: Male
 
 - type: ttsVoice
   id: Miles
   name: Miles
+  model: turbo
   sex: Male
 
 - type: ttsVoice
   id: Olivia
   name: Olivia
+  model: turbo
   sex: Female
 
 - type: ttsVoice
   id: Ryan
   name: Ryan
+  model: turbo
   sex: Male
 
 - type: ttsVoice
   id: Taylor
   name: Taylor
+  model: turbo
   sex: Female
 
 - type: ttsVoice
   id: Thomas
   name: Thomas
+  model: turbo
   sex: Male
