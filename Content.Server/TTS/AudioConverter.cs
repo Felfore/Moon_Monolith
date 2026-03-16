@@ -2,41 +2,42 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace Content.Server.TTS;
-public static class AudioConverter
+namespace Content.Server.TTS
 {
-    public static byte[] ConvertToOgg(byte[] inputAudioBytes)
+    public static class AudioConverter
     {
-        var inputPath = Path.GetTempFileName();
-        var outputPath = Path.ChangeExtension(Path.GetTempFileName(), ".ogg");
-
-        File.WriteAllBytes(inputPath, inputAudioBytes);
-
-        try
+        public static byte[] ConvertToOgg(byte[] inputAudioBytes)
         {
-            var ffmpeg = new ProcessStartInfo
+            var inputPath = Path.GetTempFileName();
+            var outputPath = Path.ChangeExtension(Path.GetTempFileName(), ".ogg");
+
+            File.WriteAllBytes(inputPath, inputAudioBytes);
+
+            try
             {
-                FileName = "ffmpeg",
-                Arguments = $"-y -i \"{inputPath}\" " + "-filter:a loudnorm=I=-16:TP=-1.5:LRA=11 " + $" -c:a libvorbis \"{outputPath}\"",
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                RedirectStandardError = true,
-                RedirectStandardOutput = true
-            };
+                var ffmpeg = new ProcessStartInfo
+                {
+                    FileName = "ffmpeg",
+                    Arguments = $"-y -i \"{inputPath}\" " + "-filter:a loudnorm=I=-16:TP=-1.5:LRA=11 " + $" -c:a libvorbis \"{outputPath}\"",
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true
+                };
 
-            using var process = Process.Start(ffmpeg)!;
-            process.WaitForExit();
+                using var process = Process.Start(ffmpeg)!;
+                process.WaitForExit();
 
-            if (!File.Exists(outputPath))
-                throw new FileNotFoundException("FFmpeg did not produce an output file.");
+                if (!File.Exists(outputPath))
+                    throw new FileNotFoundException("FFmpeg did not produce an output file.");
 
-            return File.ReadAllBytes(outputPath);
-        }
-        finally
-        {
-            try { File.Delete(inputPath); } catch { }
-            try { File.Delete(outputPath); } catch { }
+                return File.ReadAllBytes(outputPath);
+            }
+            finally
+            {
+                try { File.Delete(inputPath); } catch { }
+                try { File.Delete(outputPath); } catch { }
+            }
         }
     }
 }
-

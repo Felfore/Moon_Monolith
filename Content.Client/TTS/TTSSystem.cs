@@ -1,4 +1,5 @@
-﻿using Content.Shared._Goobstation.CCVars;
+﻿using System.IO;
+using Content.Shared._Goobstation.CCVars;
 using Content.Shared.TTS;
 using Robust.Client.Audio;
 using Robust.Shared.Audio;
@@ -66,6 +67,31 @@ public sealed class TTSSystem : EntitySystem
     {
         _sawmill.Verbose($"Play TTS audio {ev.Data.Length} bytes from {ev.SourceUid} entity");
 
+        // Ensure that the data is not empty
+        if (ev.Data.Length == 0)
+        {
+            _sawmill.Error("Received empty TTS audio data");
+            return;
+        }
+
+        // Load the OGG/Opus audio bytes directly
+        using var audioStream = _audioInt.LoadAudioOggVorbis(new MemoryStream(ev.Data));
+
+        // Set audio parameters for volume and distance
+        var audioParams = AudioParams.Default
+            .WithVolume(AdjustVolume(ev.IsWhisper))
+            .WithMaxDistance(AdjustDistance(ev.IsWhisper));
+
+        // Play the audio either attached to an entity or globally
+        if (ev.SourceUid != null)
+            _audio.PlayEntity(audioStream, GetEntity(ev.SourceUid.Value), null, audioParams);
+        else
+            _audio.PlayGlobal(audioStream, null, audioParams);
+    }
+    /*private void OnPlayTTS(PlayTTSEvent ev)
+    {
+        _sawmill.Verbose($"Play TTS audio {ev.Data.Length} bytes from {ev.SourceUid} entity");
+
         // Ensure that the data is not empty or invalid
         if (ev.Data.Length == 0)
         {
@@ -92,7 +118,7 @@ public sealed class TTSSystem : EntitySystem
             _audio.PlayEntity(audioStream, GetEntity(ev.SourceUid.Value), null, audioParams);
         else
             _audio.PlayGlobal(audioStream, null, audioParams);
-    }
+    }*/
 
     private float AdjustVolume(bool isWhisper)
     {

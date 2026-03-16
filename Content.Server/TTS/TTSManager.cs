@@ -9,6 +9,7 @@ using Robust.Shared.ContentPack;
 using Robust.Shared.Utility;
 using System.Threading;
 
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -155,7 +156,7 @@ public sealed class TTSManager
             {
                 using var client = new HttpClient();
 
-                var requestUrl = $"https://localhost:8004/v1/audio/speech";
+                var requestUrl = $"http://localhost:8004/v1/audio/speech";
 
                 // JSON payload for Chatterbox TTS
                 var payload = new
@@ -216,7 +217,7 @@ public sealed class TTSManager
                 File.Delete(files.ElementAt(i));
             }
 
-            var filePath = _cachePath + ResPath.SystemSeparatorStr + key + ".raw";
+            var filePath = _cachePath + ResPath.SystemSeparatorStr + key + ".ogg";
             File.WriteAllBytes(filePath, file);
 
             return true;
@@ -240,7 +241,7 @@ public sealed class TTSManager
         switch (type)
         {
             case "file":
-                var path = _cachePath + ResPath.SystemSeparatorStr + key + ".raw";
+                var path = _cachePath + ResPath.SystemSeparatorStr + key + ".ogg";
                 return !File.Exists(path) ? null : await File.ReadAllBytesAsync(path);
             case "memory":
                 return _memoryCache.GetValueOrDefault(key);
@@ -259,10 +260,10 @@ public sealed class TTSManager
             {
                 #if WINDOWS
                 FileName = "cmd.exe",
-                Arguments = $"/C \"del /q {_cachePath}\\*.raw\"",
+                Arguments = $"/C \"del /q {_cachePath}\\*.ogg\"",
                 #else
                 FileName = "/bin/sh",
-                Arguments = $"-c \"rm {_cachePath}/*.raw\"",
+                Arguments = $"-c \"rm {_cachePath}/*.ogg\"",
                 #endif
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
