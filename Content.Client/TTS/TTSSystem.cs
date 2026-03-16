@@ -75,7 +75,9 @@ public sealed class TTSSystem : EntitySystem
         }
 
         // Load the OGG/Opus audio bytes directly
-        using var audioStream = _audioInt.LoadAudioOggVorbis(new MemoryStream(ev.Data));
+        using var stream = new MemoryStream(ev.Data);
+        var audioStream = _audioInt.LoadAudioOggVorbis(stream);
+        //using var audioStream = _audioInt.LoadAudioOggVorbis(new MemoryStream(ev.Data));
 
         // Set audio parameters for volume and distance
         var audioParams = AudioParams.Default
@@ -88,37 +90,6 @@ public sealed class TTSSystem : EntitySystem
         else
             _audio.PlayGlobal(audioStream, null, audioParams);
     }
-    /*private void OnPlayTTS(PlayTTSEvent ev)
-    {
-        _sawmill.Verbose($"Play TTS audio {ev.Data.Length} bytes from {ev.SourceUid} entity");
-
-        // Ensure that the data is not empty or invalid
-        if (ev.Data.Length == 0)
-        {
-            _sawmill.Error("Received empty TTS audio data");
-            return;
-        }
-
-        // Convert the byte array to short[] (2 bytes per short)
-        var shortArray = new short[ev.Data.Length / 2];
-        for (int i = 0; i < shortArray.Length; i++)
-        {
-            // Combine two bytes into one short (little-endian)
-            shortArray[i] = (short)((ev.Data[i * 2 + 1] << 8) | (ev.Data[i * 2] & 0xFF));
-        }
-
-        // Create an AudioStream directly from raw data
-        var audioStream = _audioInt.LoadAudioRaw(shortArray, 1, 22050);
-
-        var audioParams = AudioParams.Default
-            .WithVolume(AdjustVolume(ev.IsWhisper))
-            .WithMaxDistance(AdjustDistance(ev.IsWhisper));
-
-        if (ev.SourceUid != null)
-            _audio.PlayEntity(audioStream, GetEntity(ev.SourceUid.Value), null, audioParams);
-        else
-            _audio.PlayGlobal(audioStream, null, audioParams);
-    }*/
 
     private float AdjustVolume(bool isWhisper)
     {
