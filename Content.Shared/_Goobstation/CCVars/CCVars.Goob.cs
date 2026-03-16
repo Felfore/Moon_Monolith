@@ -24,7 +24,7 @@ public sealed partial class GoobCVars
         CVarDef.Create("tts.unknown_volume", 0.2f * 4, CVar.ARCHIVE | CVar.CLIENTONLY);
 
     public static readonly CVarDef<bool> TTSEnabled =
-        CVarDef.Create("tts.enabled", false, CVar.SERVERONLY);
+        CVarDef.Create("tts.enabled", true, CVar.SERVERONLY);
 
     /// <summary>
     /// Number of TTS generations that can be done simultaneously
