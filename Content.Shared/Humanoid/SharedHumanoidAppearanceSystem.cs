@@ -43,12 +43,12 @@ public abstract class SharedHumanoidAppearanceSystem : EntitySystem
     [ValidatePrototypeId<SpeciesPrototype>]
     public const string DefaultSpecies = "Human";
 
-    public const string DefaultVoice = "John"; // Mooncord - choose the default voices
+    public const string DefaultVoice = "Adrian"; // Mooncord - choose the default voices
     public static readonly Dictionary<Sex, string> DefaultSexVoice = new()
     {
-        {Sex.Male, "John"},
-        {Sex.Female, "Fiona"},
-        {Sex.Unsexed, "Fiona"},
+        {Sex.Male, "Adrian"},
+        {Sex.Female, "Alice"},
+        {Sex.Unsexed, "Alice"},
     };
 
     public override void Initialize()

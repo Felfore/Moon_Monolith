@@ -9,6 +9,10 @@ using Robust.Shared.ContentPack;
 using Robust.Shared.Utility;
 using System.Threading;
 
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Text.Json;
+
 namespace Content.Server.TTS;
 
 // ReSharper disable once InconsistentNaming
@@ -145,55 +149,47 @@ public sealed class TTSManager
         try
         {
             await _generationSemaphore.WaitAsync();
+            var reqTime = DateTime.UtcNow;
 
             try
             {
-                var strCmdText = $"echo '{text}' | piper --model {(_modelPath + ResPath.SystemSeparatorStr + model)}.onnx --speaker {speaker} --output_raw";
+                using var client = new HttpClient();
 
-                var proc = new Process
+                var requestUrl = $"https://localhost:8004/v1/audio/speech";
+
+                // JSON payload for Chatterbox TTS
+                var payload = new
                 {
-                    StartInfo = new ProcessStartInfo
-                    {
-                        #if WINDOWS
-                        FileName = "cmd.exe",
-                        Arguments = $"/C \"{strCmdText}\"",
-                        #else
-                        FileName = "/bin/sh",
-                        Arguments = $"-c \"{strCmdText}\"",
-                        #endif
-                        UseShellExecute = false,
-                        RedirectStandardOutput = true,
-                        CreateNoWindow = true,
-                    },
+                    model = "turbo",
+                    input = text,
+                    voice = speaker + ".wav",
+                    response_format = "opus",
+                    speed = 1
                 };
 
-                var reqTime = DateTime.UtcNow;
-                try
+                var response = await client.PostAsJsonAsync(requestUrl, payload);
+
+                if (!response.IsSuccessStatusCode)
                 {
-                    proc.Start();
-
-                    using var memoryStream = new MemoryStream();
-                    await proc.StandardOutput.BaseStream.CopyToAsync(memoryStream).ConfigureAwait(false);
-
-                    await proc.WaitForExitAsync().ConfigureAwait(false);
-
-                    if (proc.ExitCode != 0)
-                    {
-                        RequestTimings.WithLabels("Error").Observe((DateTime.UtcNow - reqTime).TotalSeconds);
-                        _sawmill.Error($"Piper process failed for '{text}' speech by '{speaker}' speaker.");
-                        return null;
-                    }
-
-                    var rawData = memoryStream.ToArray();
-                    TryCache(key, rawData);
-                    return rawData;
-                }
-                catch (Exception e)
-                {
+                    _sawmill.Error($"Chatterbox TTS request failed for '{text}' by '{speaker}'. Status: {response.StatusCode}");
                     RequestTimings.WithLabels("Error").Observe((DateTime.UtcNow - reqTime).TotalSeconds);
-                    _sawmill.Error($"Failed to generate new sound for '{text}' speech by '{speaker}' speaker\n{e}");
                     return null;
                 }
+
+                var audioBytes = await response.Content.ReadAsByteArrayAsync();
+
+                // Convert TTS to .ogg file for compatability
+                audioBytes = AudioConverter.ConvertToOgg(audioBytes);
+
+                TryCache(key, audioBytes);
+                RequestTimings.WithLabels("API").Observe((DateTime.UtcNow - reqTime).TotalSeconds);
+                return audioBytes;
+            }
+            catch (Exception e)
+            {
+                RequestTimings.WithLabels("Error").Observe((DateTime.UtcNow - reqTime).TotalSeconds);
+                _sawmill.Error($"Failed to generate new sound for '{text}' speech by '{speaker}' speaker\n{e}");
+                return null;
             }
             finally
             {

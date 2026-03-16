@@ -1,95 +1,139 @@
 - type: ttsVoice
-  id: Bryce
-  name: Bryce
-  model: Bryce
+  id: Abigail
+  name: Abigail
+  sex: Female
+
+- type: ttsVoice
+  id: Adrian
+  name: Adrian
   sex: Male
 
 - type: ttsVoice
-  id: Arctic
-  name: Arctic
-  model: Arctic
+  id: Alexander
+  name: Alexander
   sex: Male
 
 - type: ttsVoice
-  id: Danny
-  name: Danny
-  model: Danny
+  id: Alice
+  name: Alice
+  sex: Female
+
+- type: ttsVoice
+  id: Austin
+  name: Austin
   sex: Male
 
 - type: ttsVoice
-  id: Jeff
-  name: Jeff
-  model: hfc_male
+  id: Axel
+  name: Axel
   sex: Male
 
 - type: ttsVoice
-  id: Joe
-  name: Joe
-  model: Joe
+  id: Connor
+  name: Connor
   sex: Male
 
 - type: ttsVoice
-  id: John
-  name: John
-  model: John
+  id: Cora
+  name: Cora
+  sex: Female
+
+- type: ttsVoice
+  id: Elena
+  name: Elena
+  sex: Female
+
+- type: ttsVoice
+  id: Eli
+  name: Eli
   sex: Male
 
 - type: ttsVoice
-  id: Norman
-  name: Norman
-  model: Norman
+  id: Emily
+  name: Emily
+  sex: Female
+
+- type: ttsVoice
+  id: Everett
+  name: Everett
   sex: Male
+
+- type: ttsVoice
+  id: Gabriel
+  name: Gabriel
+  sex: Male
+
+- type: ttsVoice
+  id: Gianna
+  name: Gianna
+  sex: Female
+
+- type: ttsVoice
+  id: Henry
+  name: Henry
+  sex: Male
+
+- type: ttsVoice
+  id: Ian
+  name: Ian
+  sex: Male
+
+- type: ttsVoice
+  id: Jade
+  name: Jade
+  sex: Female
+
+- type: ttsVoice
+  id: Jeremiah
+  name: Jeremiah
+  sex: Male
+
+- type: ttsVoice
+  id: Jordan
+  name: Jordan
+  sex: Female
+
+- type: ttsVoice
+  id: Julian
+  name: Julian
+  sex: Male
+
+- type: ttsVoice
+  id: Layla
+  name: Layla
+  sex: Female
+
+- type: ttsVoice
+  id: Leonardo
+  name: Leonardo
+  sex: Male
+
+- type: ttsVoice
+  id: Michael
+  name: Michael
+  sex: Male
+
+- type: ttsVoice
+  id: Miles
+  name: Miles
+  sex: Male
+
+- type: ttsVoice
+  id: Olivia
+  name: Olivia
+  sex: Female
 
 - type: ttsVoice
   id: Ryan
   name: Ryan
-  model: Ryan
   sex: Male
 
 - type: ttsVoice
-  id: Amy
-  name: Amy
-  model: Amy
+  id: Taylor
+  name: Taylor
   sex: Female
 
 - type: ttsVoice
-  id: Fiona
-  name: Fiona
-  model: hfc_female
-  sex: Female
-
-- type: ttsVoice
-  id: Kathleen
-  name: Kathleen
-  model: Kathleen
-  sex: Female
-
-- type: ttsVoice
-  id: Kristin
-  name: Kristin
-  model: Kristin
-  sex: Female
-
-- type: ttsVoice
-  id: Kusal
-  name: Kusal
-  model: Kusal
+  id: Thomas
+  name: Thomas
   sex: Male
-
-- type: ttsVoice
-  id: Brit
-  name: Brit
-  model: Libritts
-  sex: Female
-
-- type: ttsVoice
-  id: Kait
-  name: Kait
-  model: Ljspeech
-  sex: Female
-
-- type: ttsVoice
-  id: Lessac
-  name: Lessac
-  model: Lessac
-  sex: Female
