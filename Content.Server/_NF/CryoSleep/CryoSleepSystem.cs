@@ -467,14 +467,18 @@ public sealed partial class CryoSleepSystem : SharedCryoSleepSystem
         }
 
         // Start a timer. When it ends, the body needs to be deleted.
-        Timer.Spawn(TimeSpan.FromSeconds(_configurationManager.GetCVar(NFCCVars.CryoExpirationTime)), () =>
+        var expirationTime = _configurationManager.GetCVar(NFCCVars.CryoExpirationTime);
+        if (expirationTime > 0)
         {
-            if (id != null)
-                ResetCryosleepState(id.Value);
+            Timer.Spawn(TimeSpan.FromSeconds(expirationTime), () =>
+            {
+                if (id != null)
+                    ResetCryosleepState(id.Value);
 
-            if (!Deleted(bodyId) && Transform(bodyId).ParentUid == _storageMap)
-                QueueDel(bodyId);
-        });
+                if (!Deleted(bodyId) && Transform(bodyId).ParentUid == _storageMap)
+                    QueueDel(bodyId);
+            });
+        }
     }
 
     /// <param name="body">If not null, will not eject if the stored body is different from that parameter.</param>
