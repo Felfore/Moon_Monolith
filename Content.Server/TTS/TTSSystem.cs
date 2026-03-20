@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Content.Server.Chat.Systems;
+using Content.Server.Radio.EntitySystems;
 using Content.Shared._Goobstation.CCVars;
 using Content.Shared.GameTicking;
 using Content.Shared.TTS;
@@ -19,6 +20,8 @@ public sealed partial class TTSSystem : EntitySystem
     [Dependency] private readonly TTSManager _ttsManager = default!;
     [Dependency] private readonly SharedTransformSystem _xforms = default!;
     [Dependency] private readonly IRobustRandom _rng = default!;
+
+    private ISawmill _sawmill = default!;
 
     private readonly List<string> _sampleText = new()
     {
@@ -40,13 +43,18 @@ public sealed partial class TTSSystem : EntitySystem
 
     public override void Initialize()
     {
+
+        _sawmill = Logger.GetSawmill("tts");
+
         _cfg.OnValueChanged(GoobCVars.TTSEnabled, v => _isEnabled = v, true);
 
         SubscribeLocalEvent<TransformSpeechEvent>(OnTransformSpeech);
-        SubscribeLocalEvent<TTSComponent, EntitySpokeEvent>(OnEntitySpoke);
+        SubscribeLocalEvent<TTSComponent, EntitySpokeEvent>(OnEntitySpoke, before: new[] { typeof(RadioSystem) });
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
 
         SubscribeNetworkEvent<RequestPreviewTTSEvent>(OnRequestPreviewTTS);
+
+        SubscribeLocalEvent<RadioSpokeEvent>(OnRadioSpoke);
     }
 
     public override void Shutdown()
@@ -92,6 +100,9 @@ public sealed partial class TTSSystem : EntitySystem
         if (!_prototypeManager.TryIndex<TTSVoicePrototype>(voiceId, out var protoVoice))
             return;
 
+        if (args.Channel != null)
+            return;
+
         if (args.IsWhisper)
         {
             HandleWhisper(uid, args.Message, protoVoice.Model, protoVoice.Speaker);
@@ -101,6 +112,46 @@ public sealed partial class TTSSystem : EntitySystem
         HandleSay(uid, args.Message, protoVoice.Model, protoVoice.Speaker);
     }
 
+    private void OnRadioSpoke(RadioSpokeEvent args)
+    {
+        _sawmill.Debug($"OnRadioSpoke fired, source={args.Source}, receivers={args.Receivers.Count}");
+        if (!_isEnabled)
+            return;
+
+        if (!TryComp<TTSComponent>(args.Source, out var ttsComp) ||
+            ttsComp.VoicePrototypeId == null)
+            return;
+
+        if (!_prototypeManager.TryIndex<TTSVoicePrototype>(ttsComp.VoicePrototypeId, out var protoVoice))
+            return;
+
+        var sessions = args.Receivers;
+        var message = args.Message;
+        var model = protoVoice.Model;
+        var speaker = protoVoice.Speaker;
+        var source = args.Source;
+
+        ProcessRadioTTS(source, model, speaker, message, sessions);
+    }
+
+    private async void ProcessRadioTTS(EntityUid source, string model, string speaker, string message, List<ICommonSession> sessions)
+    {
+        _sawmill.Debug($"ProcessRadioTTS started, message='{message}'");
+        try
+        {
+            var radioAudio = await _ttsManager.ConvertTextToSpeechRadio(model, speaker, message);
+            if (radioAudio is null)
+                return;
+
+            var ttsEvent = new PlayTTSEvent(radioAudio, GetNetEntity(source), isRadio: true);
+            foreach (var session in sessions)
+                RaiseNetworkEvent(ttsEvent, session);
+        }
+        catch (Exception e)
+        {
+            _sawmill.Error($"ProcessRadioTTS failed: {e}");
+        }
+    }
     private async void HandleSay(EntityUid uid, string message, string model, string speaker)
     {
         var soundData = await GenerateTTS(message, model, speaker);

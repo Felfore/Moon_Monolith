@@ -85,7 +85,7 @@ public sealed class TTSSystem : EntitySystem
             .WithMaxDistance(AdjustDistance(ev.IsWhisper));
 
         // Play the audio either attached to an entity or globally
-        if (ev.SourceUid != null)
+        if (ev.SourceUid != null && !ev.IsRadio)
             _audio.PlayEntity(audioStream, GetEntity(ev.SourceUid.Value), null, audioParams);
         else
             _audio.PlayGlobal(audioStream, null, audioParams);

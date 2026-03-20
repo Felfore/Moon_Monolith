@@ -203,6 +203,34 @@ public sealed class TTSManager
         }
     }
 
+    public async Task<byte[]?> ConvertTextToSpeechRadio(string model, string speaker, string text)
+    {
+        _sawmill.Debug($"ConvertTextToSpeechRadio: started for '{text}'");
+
+        var radioKey = $"radio/{model}/{speaker}/{text}".GetHashCode();
+        var cached = await TryGetCached(radioKey);
+        if (cached != null)
+        {
+            _sawmill.Debug($"ConvertTextToSpeechRadio: cache hit for '{text}'");
+            return cached;
+        }
+
+        _sawmill.Debug($"ConvertTextToSpeechRadio: no cache, calling ConvertTextToSpeech for '{text}'");
+        var normalAudio = await ConvertTextToSpeech(model, speaker, text);
+        if (normalAudio is null)
+        {
+            _sawmill.Debug($"ConvertTextToSpeechRadio: ConvertTextToSpeech returned null for '{text}'");
+            return null;
+        }
+
+        _sawmill.Debug($"ConvertTextToSpeechRadio: got {normalAudio.Length} bytes, applying radio effect");
+        var radioAudio = await AudioConverter.ApplyRadioEffect(normalAudio);
+        _sawmill.Debug($"ConvertTextToSpeechRadio: radio effect produced {radioAudio.Length} bytes, caching");
+
+        TryCache(radioKey, radioAudio);
+        return radioAudio;
+    }
+
     private bool TryCache(int key, byte[] file)
     {
         if (_cfg.GetCVar(GoobCVars.TTSCacheType) != "memory")
