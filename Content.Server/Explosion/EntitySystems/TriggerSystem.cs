@@ -83,6 +83,7 @@ namespace Content.Server.Explosion.EntitySystems
         [Dependency] private readonly InventorySystem _inventory = default!;
         [Dependency] private readonly ElectrocutionSystem _electrocution = default!;
         [Dependency] private readonly StationSystem _station = default!; // Frontier: medical insurance
+        [Dependency] private readonly SharedHumanoidAppearanceSystem _humanoid = default!;
 
         public override void Initialize()
         {
@@ -261,7 +262,7 @@ namespace Content.Server.Explosion.EntitySystems
             // Frontier: Gets species of the implant user
             var speciesText = $"";
             if (TryComp<HumanoidAppearanceComponent>(implanted.ImplantedEntity, out var species))
-                speciesText = $" ({species!.Species})";
+                speciesText = $" ({_humanoid.GetSpeciesRepresentation(species!.Species)})";
 
             var critMessage = Loc.GetString(component.CritMessage, ("user", implanted.ImplantedEntity.Value), ("specie", speciesText), ("grid", stationText!), ("position", posText));
             var deathMessage = Loc.GetString(component.DeathMessage, ("user", implanted.ImplantedEntity.Value), ("specie", speciesText), ("grid", stationText!), ("position", posText));

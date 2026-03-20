@@ -38,6 +38,7 @@ public sealed class MedicalTeleportImplantSystem : EntitySystem
 // #Moonolith addition start
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly Content.Shared.Damage.DamageableSystem _damageable = default!;
+    [Dependency] private readonly SharedHumanoidAppearanceSystem _humanoid = default!;
 // #Moonolith addition end
 
     public override void Initialize()
@@ -127,7 +128,7 @@ public sealed class MedicalTeleportImplantSystem : EntitySystem
         // Send radio warning
         var speciesText = $"";
         if (TryComp<HumanoidAppearanceComponent>(implanted.ImplantedEntity, out var species))
-            speciesText = $" ({species!.Species})";
+            speciesText = $" ({_humanoid.GetSpeciesRepresentation(species!.Species)})";
         var deathMessage = Loc.GetString(comp.DeathMessage, ("user", owner), ("specie", speciesText), ("delaySeconds", comp.TeleportDelay.TotalSeconds));
         _radio.SendRadioMessage(uid, deathMessage, _prototypeManager.Index(comp.RadioChannel), uid);
 
@@ -218,7 +219,7 @@ public sealed class MedicalTeleportImplantSystem : EntitySystem
 
             var speciesText = $"";
             if (TryComp<HumanoidAppearanceComponent>(implanted.ImplantedEntity, out var species))
-                speciesText = $" ({species!.Species})";
+                speciesText = $" ({_humanoid.GetSpeciesRepresentation(species!.Species)})";
             var teleportMessage = Loc.GetString(comp.TeleportMessage, ("user", owner), ("specie", speciesText), ("delaySeconds", comp.TeleportDelay.TotalSeconds));
             _radio.SendRadioMessage(uid, teleportMessage, _prototypeManager.Index(comp.RadioChannel), uid);
 
@@ -316,7 +317,7 @@ public sealed class MedicalTeleportImplantSystem : EntitySystem
             // Announce
             var speciesText = $"";
             if (TryComp<HumanoidAppearanceComponent>(owner, out var species))
-                speciesText = $" ({species!.Species})";
+                speciesText = $" ({_humanoid.GetSpeciesRepresentation(species!.Species)})";
             var teleportMessage = Loc.GetString("medical-teleport-implant-emergency-teleport-message", ("user", owner), ("specie", speciesText));
             _radio.SendRadioMessage(implantUid.Value, teleportMessage, _prototypeManager.Index(comp.RadioChannel), implantUid.Value);
 
