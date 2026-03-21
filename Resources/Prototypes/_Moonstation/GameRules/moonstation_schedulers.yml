@@ -1,0 +1,121 @@
+# Basic & Bluespace Schedulers
+- type: entity
+  id: MoonstationBasicEventScheduler
+  parent: BaseGameRule
+  components:
+  - type: BasicStationEventScheduler
+    scheduledGameRules: !type:NestedSelector
+      tableId: MoonBasicGameRulesTable
+    minimumTimeUntilFirstEvent: 200 # ~3.3 minutes
+    minMaxEventTiming:
+      min: 180 # 3 minutes
+      max: 600 # 10 minutes
+
+- type: entity
+  id: MoonstationBluespaceEventScheduler
+  parent: BaseGameRule
+  components:
+  - type: BasicStationEventScheduler
+    scheduledGameRules: !type:NestedSelector
+      tableId: MoonMajorBluespaceEventsTable
+    minimumTimeUntilFirstEvent: 1800 # 30 minutes
+    minMaxEventTiming:
+      min: 1800 # 30 minutes
+      max: 3000 # 50 minutes
+
+- type: entity
+  id: MoonstationBluespaceDungeonScheduler
+  parent: BaseGameRule
+  components:
+  - type: BasicStationEventScheduler
+    scheduledGameRules: !type:NestedSelector
+      tableId: MoonDungeonBluespaceEventsTable
+    minimumTimeUntilFirstEvent: 600 # 10 minutes
+    minMaxEventTiming:
+      min: 2100 # 35 minutes
+      max: 2400 # 40 minutes
+
+- type: entity
+  id: MoonstationBluespaceSalvageScheduler
+  parent: BaseGameRule
+  components:
+  - type: BasicStationEventScheduler
+    scheduledGameRules: !type:NestedSelector
+      tableId: MoonSalvageBluespaceEventsTable
+    minimumTimeUntilFirstEvent: 420 # 7 minutes
+    minMaxEventTiming:
+      min: 2100 # 35 minutes
+      max: 2400 # 40 minutes
+
+- type: entity
+  id: MoonstationSmugglingScheduler
+  parent: BaseGameRule
+  components:
+  - type: BasicStationEventScheduler
+    scheduledGameRules: !type:NestedSelector
+      tableId: MoonMajorSmugglingEventsTable
+    minimumTimeUntilFirstEvent: 1800 # 30 minutes
+    minMaxEventTiming:
+      min: 28800 # 8 hours
+      max: 43200 # 12 hours
+
+- type: entity
+  id: MoonstationMonolithicScheduler
+  parent: BaseGameRule
+  components:
+  - type: BasicStationEventScheduler
+    scheduledGameRules: !type:NestedSelector
+      tableId: MoonMonolithicEventsTable
+    minimumTimeUntilFirstEvent: 600 # 10 minutes
+    minMaxEventTiming:
+      min: 420 # 7 minutes
+      max: 1200 # 20 minutes
+
+# STC "Slow" Schedulers
+- type: entity
+  id: MoonstationChimeraSTCScheduler
+  parent: BaseGameRule
+  components:
+  - type: BasicStationEventScheduler
+    scheduledGameRules: !type:NestedSelector
+      tableId: MoonChimeraShipsTable
+    minimumTimeUntilFirstEvent: 14400 # 240 minutes (4 hours)
+    minMaxEventTiming:
+      min: 5400 # 90 minutes
+      max: 5400 # 90 minutes
+
+- type: entity
+  id: MoonstationAISTCScheduler
+  parent: BaseGameRule
+  components:
+  - type: BasicStationEventScheduler
+    scheduledGameRules: !type:NestedSelector
+      tableId: MoonDamagedAIShipsTable
+    minimumTimeUntilFirstEvent: 3600 # 60 minutes
+    minMaxEventTiming:
+      min: 8100 # 135 minutes
+      max: 10800 # 180 minutes
+
+- type: entity
+  id: MoonstationAISTCTier2Scheduler
+  parent: BaseGameRule
+  components:
+  - type: BasicStationEventScheduler
+    scheduledGameRules: !type:NestedSelector
+      tableId: MoonDamagedAIShipsTableT2
+    minimumTimeUntilFirstEvent: 18000 # 5 hours
+    minMaxEventTiming:
+      min: 5400 # 90 minutes
+      max: 5400 # 90 minutes
+
+- type: entity
+  id: MoonstationAsakimSTCScheduler
+  parent: BaseGameRule
+  components:
+  - type: BasicStationEventScheduler
+    scheduledGameRules: !type:NestedSelector
+      tableId: MoonAsakimShipsTable
+    minimumTimeUntilFirstEvent: 10800 # 180 minutes (3 hours)
+    minMaxEventTiming:
+      min: 5400 # 90 minutes
+      max: 10800 # 180 minutes

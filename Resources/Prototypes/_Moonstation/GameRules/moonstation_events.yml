@@ -1,0 +1,299 @@
+# ---------------------------------------------------------------------
+# Basic Station Events
+# These are minor disruptions or flavor events designed to keep the station active.
+# ---------------------------------------------------------------------
+
+# Inherits from GasLeak.
+# Effect: Spawns atmospheric leaks on station. Includes NF start/end announcements.
+# Metrics: Weight 8, Earliest Start 15m.
+- type: entity
+  id: MoonGasLeak
+  parent: GasLeak
+
+# Inherits from CockroachMigration.
+# Effect: Spawns cockroaches, mothroaches, and rosy mothroaches via vents.
+# Metrics: Weight 6, Duration 50s.
+- type: entity
+  id: MoonCockroachMigration
+  parent: CockroachMigration
+
+# Inherits from MouseMigration.
+# Effect: Spawns various mice (incl. Cancer Mouse) via vents.
+# Metrics: Weight 6, Duration 50s, Earliest Start 15m.
+- type: entity
+  id: MoonMouseMigration
+  parent: MouseMigration
+
+# Inherits from SolarFlare.
+# Effect: Temporarily jams radio headsets (Command, Medical, Security, etc.).
+# Metrics: Weight 4, Duration 2m+, Earliest Start 15m, Reoccurrence 45m.
+- type: entity
+  id: MoonSolarFlare
+  parent: SolarFlare
+
+# Inherits from VentClog.
+# Effect: Clogs vents, ejecting random debris or contents.
+# Metrics: Weight 5, Duration 60s, Earliest Start 15m, Min Players 15.
+- type: entity
+  id: MoonVentClog
+  parent: VentClog
+
+# Inherits from BluespaceCargoCrate.
+# Effect: Spawns 2-5 random cargo crates via bluespace flash.
+# Metrics: Weight 5, Duration 35s, Reoccurrence 60m.
+- type: entity
+  id: MoonBluespaceCargoCrate
+  parent: BluespaceCargoCrate
+
+# Inherits from BluespaceMcCargoCrate.
+# Effect: Spawns McCargo food crates via bluespace flash.
+# Metrics: Weight 5, Duration 35s, Earliest Start 20m, Max Players 20, Reoccurrence 120m.
+- type: entity
+  id: MoonBluespaceMcCargoCrate
+  parent: BluespaceMcCargoCrate
+
+# Inherits from BluespaceSyndicateCrate.
+# Effect: Spawns a Syndicate Surplus bundle.
+# Metrics: Weight 1, Duration 35s, Earliest Start 60m, Reoccurrence 180m.
+- type: entity
+  id: MoonBluespaceSyndicateCrate
+  parent: BluespaceSyndicateCrate
+
+# Inherits from SmugglingFax.
+# Effect: Sends 2-3 minor dead-drop hints via fax.
+# Metrics: Weight 8, Duration 35s, Earliest Start 50m, Min Players 2, Reoccurrence 50m.
+- type: entity
+  id: MoonSmugglingFax
+  parent: SmugglingFax
+
+# Inherits from SnailMigrationLowPop.
+# Effect: Spawns snails (Standard, Speed, Moth) via vents.
+# Metrics: Weight 6, Duration 50s. Intended as a safe filler for low pop.
+- type: entity
+  id: MoonSnailMigrationLowPop
+  parent: SnailMigrationLowPop
+
+
+# ---------------------------------------------------------------------
+# Bluespace & Dungeon Events
+# These generate larger points of interest (POIs) or hostile dungeon sectors.
+# ---------------------------------------------------------------------
+
+# Inherits from BluespaceCacheError.
+# Effect: Spawns a Syndicate Weapons Cache POI (~1.5km - 5km distance).
+# Metrics: Weight 5, Earliest Start 60m, Reoccurrence 4h. Magenta IFF.
+- type: entity
+  id: MoonBluespaceCacheError
+  parent: BluespaceCacheError
+
+# Inherits from BluespaceVaultError.
+# Effect: Spawns a Secure NT Vault POI (~1.5km - 5km distance).
+# Metrics: Weight 5, Earliest Start 60m, Reoccurrence 4h. Magenta IFF.
+- type: entity
+  id: MoonBluespaceVaultError
+  parent: BluespaceVaultError
+
+# Inherits from BluespaceVaultSmallError.
+# Effect: Spawns a smaller Secure NT Vault POI.
+# Metrics: Weight 5, Earliest Start 60m, Max Players 0 (Logic filler), Reoccurrence 4h.
+- type: entity
+  id: MoonBluespaceVaultSmallError
+  parent: BluespaceVaultSmallError
+
+# Inherits from BluespaceSyndicateFTLInterception.
+# Effect: Spawns an Unidentified Syndicate Vessel (~1.5km - 2.5km distance).
+# Metrics: Weight 1, Earliest Start 80m, Reoccurrence 4h. Magenta IFF.
+- type: entity
+  id: MoonBluespaceSyndicateFTLInterception
+  parent: BluespaceSyndicateFTLInterception
+
+# Inherits from BluespacePreFractureFTLInterception.
+# Effect: Spawns a Pre-Fracture Unidentified Vessel (~2.5km - 4km distance).
+# Metrics: Weight 1, Earliest Start 100m, Reoccurrence 4h.
+- type: entity
+  id: MoonBluespacePreFractureFTLInterception
+  parent: BluespacePreFractureFTLInterception
+
+# Inherits from BluespaceDungeonBasalt.
+# Effect: Spawns a Basalt Dungeon sector. Claimable grid.
+# Metrics: Weight 5, Duration 30m, Reoccurrence 2h. Radio announcement on Supply.
+- type: entity
+  id: MoonBluespaceDungeonBasalt
+  parent: BluespaceDungeonBasalt
+
+# Inherits from BluespaceDungeonChromite.
+# Effect: Spawns a Chromite Dungeon sector. Claimable grid.
+# Metrics: Weight 5, Duration 30m, Reoccurrence 2h. Radio announcement on Supply.
+- type: entity
+  id: MoonBluespaceDungeonChromite
+  parent: BluespaceDungeonChromite
+
+# Inherits from BluespaceDungeonSnow.
+# Effect: Spawns a Snow Dungeon sector. Claimable grid.
+# Metrics: Weight 5, Duration 30m, Reoccurrence 2h. Radio announcement on Supply.
+- type: entity
+  id: MoonBluespaceDungeonSnow
+  parent: BluespaceDungeonSnow
+
+# Inherits from BluespaceDungeonCave.
+# Effect: Spawns a standard Cave Dungeon sector. Claimable grid.
+# Metrics: Weight 5, Duration 30m, Reoccurrence 2h. Radio announcement on Supply.
+- type: entity
+  id: MoonBluespaceDungeonCave
+  parent: BluespaceDungeonCave
+
+# Inherits from BluespaceDungeonScrap.
+# Effect: Spawns a Scrap Dungeon sector. Claimable grid.
+# Metrics: Weight 5, Duration 30m, Reoccurrence 2h. Radio announcement on Supply.
+- type: entity
+  id: MoonBluespaceDungeonScrap
+  parent: BluespaceDungeonScrap
+
+
+# ---------------------------------------------------------------------
+# Salvage & Smuggling
+# ---------------------------------------------------------------------
+
+# Inherits from BluespaceSalvage.
+# Effect: Spawns 2-3 salvage wrecks (Bison, Disciple, etc.) at ~1km - 2km.
+# Metrics: Weight 5, Duration 30m. Radio announcement on Engineering. Grey IFF.
+- type: entity
+  id: MoonBluespaceSalvage
+  parent: BluespaceSalvage
+
+# Inherits from SmugglingFaxBig.
+# Effect: Sends 4-5 high-priority dead-drop hints via fax.
+# Metrics: Weight 100, Min Players 10, Duration 35s.
+- type: entity
+  id: MoonSmugglingFaxBig
+  parent: SmugglingFaxBig
+
+
+# ---------------------------------------------------------------------
+# Monolithic Events
+# ---------------------------------------------------------------------
+
+# Inherits from MonolithFragmentSmallAppearance.
+# Effect: Spawns a Monolithic Asteroid Arena/POI (~2km - 4km distance).
+# Metrics: Weight 5, Earliest Start 10m, Reoccurrence 15m. Purple IFF.
+- type: entity
+  id: MoonMonolithFragmentSmallAppearance
+  parent: MonolithFragmentSmallAppearance
+
+
+# ---------------------------------------------------------------------
+# Space Traffic Control (STC) Threat Spawns
+# Hostile NPC ships that attack the station. These are customized to
+# handle population-based spawning rules.
+# ---------------------------------------------------------------------
+
+# -- Chimera Ships --
+# Aggressive hostile ships. High weights and player count requirements.
+
+# Spawns the Chimera Sakuratsu grid.
+- type: entity
+  id: MoonUnknownShuttleChimeraSakuratsu
+  parent: UnknownShuttleChimeraSakuratsu
+  components:
+  - type: StationEvent
+    minimumPlayers: 40
+
+# Spawns the Chimera Olympus grid.
+- type: entity
+  id: MoonUnknownShuttleChimeraOlympus
+  parent: UnknownShuttleChimeraOlympus
+  components:
+  - type: StationEvent
+    minimumPlayers: 40
+
+# Spawns the Chimera Tethys grid.
+- type: entity
+  id: MoonUnknownShuttleChimeraTethys
+  parent: UnknownShuttleChimeraTethys
+  components:
+  - type: StationEvent
+    minimumPlayers: 40
+
+# Spawns the Chimera Legionnaire grid.
+- type: entity
+  id: MoonUnknownShuttleChimeraLegionnaire
+  parent: UnknownShuttleChimeraLegionnaire
+  components:
+  - type: StationEvent
+    minimumPlayers: 40
+
+
+# -- AI Ships (Tier 1) --
+# Malfunctioning AI vessels. Dangerous but lower density than Tier 2.
+
+# Spawns the AI Zenith grid. Max 4 occurrences.
+- type: entity
+  id: MoonUnknownShuttleZenith
+  parent: UnknownShuttleZenith
+  components:
+  - type: StationEvent
+    minimumPlayers: 32
+
+# Spawns the AI Wyrm grid. High occurrence (max 6).
+- type: entity
+  id: MoonUnknownShuttleWyrm
+  parent: UnknownShuttleWyrm
+  components:
+  - type: StationEvent
+    minimumPlayers: 15
+
+# Spawns the AI Nebula grid. Max 4 occurrences.
+- type: entity
+  id: MoonUnknownShuttleNebula
+  parent: UnknownShuttleNebula
+  components:
+  - type: StationEvent
+    minimumPlayers: 32
+
+
+# -- AI Ships (Tier 2) --
+# Elite AI vessels with enhanced combat capabilities.
+
+# Spawns the AI Zenith E (Enhanced) grid.
+- type: entity
+  id: MoonUnknownShuttleZenithE
+  parent: UnknownShuttleZenithE
+  components:
+  - type: StationEvent
+    minimumPlayers: 32
+
+# Spawns the AI Razor N grid.
+- type: entity
+  id: MoonUnknownShuttleRazorN
+  parent: UnknownShuttleRazorN
+  components:
+  - type: StationEvent
+    minimumPlayers: 15
+
+# Spawns the AI Wyvern Capital Ship. Only 1 occurrence per round.
+- type: entity
+  id: MoonUnknownShuttleWyvern
+  parent: UnknownShuttleWyvern
+  components:
+  - type: StationEvent
+    minimumPlayers: 60
+
+
+# -- Asakim Ships --
+# High-threat hostile vessels from the Asakim faction.
+
+# Spawns the Asakim Small grid. Max 4 occurrences.
+- type: entity
+  id: MoonUnknownShuttleAsakimSmall
+  parent: UnknownShuttleAsakimSmall
+  components:
+  - type: StationEvent
+    minimumPlayers: 40
+
+# Spawns the Asakim Medium grid. Max 3 occurrences.
+- type: entity
+  id: MoonUnknownShuttleAsakimMedium
+  parent: UnknownShuttleAsakimMedium
+  components:
+  - type: StationEvent
+    minimumPlayers: 60

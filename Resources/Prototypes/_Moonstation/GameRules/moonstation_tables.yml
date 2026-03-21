@@ -1,0 +1,105 @@
+# Basic Tables
+- type: entityTable
+  id: MoonBasicGameRulesTable
+  table: !type:AllSelector
+    children:
+      - !type:NestedSelector
+        tableId: MoonBasicCalmEventsTable
+      - !type:NestedSelector
+        tableId: MoonCalmPestEventsTable
+
+- type: entityTable
+  id: MoonBasicCalmEventsTable
+  table: !type:AllSelector
+    children:
+      - id: MoonCockroachMigration
+      - id: MoonGasLeak
+      - id: MoonMouseMigration
+      - id: MoonSolarFlare
+      - id: MoonVentClog
+      - id: MoonBluespaceCargoCrate
+      - id: MoonBluespaceMcCargoCrate
+      - id: MoonBluespaceSyndicateCrate
+      - id: MoonSmugglingFax
+
+- type: entityTable
+  id: MoonCalmPestEventsTable
+  table: !type:AllSelector
+    children:
+      - id: MoonSnailMigrationLowPop
+      - id: MoonCockroachMigration
+      - id: MoonMouseMigration
+
+# Bluespace Tables
+- type: entityTable
+  id: MoonMajorBluespaceEventsTable
+  table: !type:AllSelector
+    children:
+      - id: MoonBluespaceCacheError
+      - id: MoonBluespaceVaultError
+      - id: MoonBluespaceVaultSmallError
+      - id: MoonBluespaceSyndicateFTLInterception
+      - id: MoonBluespacePreFractureFTLInterception
+
+- type: entityTable
+  id: MoonDungeonBluespaceEventsTable
+  table: !type:AllSelector
+    children:
+      - id: MoonBluespaceDungeonBasalt
+      - id: MoonBluespaceDungeonChromite
+      - id: MoonBluespaceDungeonSnow
+      - id: MoonBluespaceDungeonCave
+      - id: MoonBluespaceDungeonScrap
+
+- type: entityTable
+  id: MoonSalvageBluespaceEventsTable
+  table: !type:AllSelector
+    children:
+      - id: MoonBluespaceSalvage
+
+# Smuggling Tables
+- type: entityTable
+  id: MoonMajorSmugglingEventsTable
+  table: !type:AllSelector
+    children:
+      - id: MoonSmugglingFaxBig
+
+# Monolithic Tables
+- type: entityTable
+  id: MoonMonolithicEventsTable
+  table: !type:AllSelector
+    children:
+      - id: MoonMonolithFragmentSmallAppearance
+
+# STC Tables
+- type: entityTable
+  id: MoonChimeraShipsTable
+  table: !type:AllSelector
+    children:
+      - id: MoonUnknownShuttleChimeraSakuratsu
+      - id: MoonUnknownShuttleChimeraOlympus
+      - id: MoonUnknownShuttleChimeraTethys
+      - id: MoonUnknownShuttleChimeraLegionnaire
+
+- type: entityTable
+  id: MoonDamagedAIShipsTable
+  table: !type:AllSelector
+    children:
+      - id: MoonUnknownShuttleZenith
+      - id: MoonUnknownShuttleWyrm
+      - id: MoonUnknownShuttleNebula
+
+- type: entityTable
+  id: MoonDamagedAIShipsTableT2
+  table: !type:AllSelector
+    children:
+      - id: MoonUnknownShuttleZenithE
+      - id: MoonUnknownShuttleRazorN
+      - id: MoonUnknownShuttleWyvern
+
+- type: entityTable
+  id: MoonAsakimShipsTable
+  table: !type:AllSelector
+    children:
+      - id: MoonUnknownShuttleAsakimSmall
+      - id: MoonUnknownShuttleAsakimMedium
