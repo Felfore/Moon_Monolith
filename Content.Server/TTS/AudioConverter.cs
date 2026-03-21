@@ -43,7 +43,7 @@ namespace Content.Server.TTS
 
         public static async Task<byte[]> ApplyRadioEffect(byte[] inputAudioBytes)
         {
-            var inputPath = Path.ChangeExtension(Path.GetTempFileName(), ".ogg");
+            var inputPath = Path.GetTempFileName();
             var outputPath = Path.ChangeExtension(Path.GetTempFileName(), ".ogg");
 
             File.WriteAllBytes(inputPath, inputAudioBytes);
