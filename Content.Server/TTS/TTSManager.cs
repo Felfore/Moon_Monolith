@@ -40,7 +40,7 @@ public sealed class TTSManager
     [Dependency] private readonly IResourceManager _resource = default!;
     private ISawmill _sawmill = default!;
 
-    private readonly Dictionary<int, byte[]> _memoryCache = new();
+    private readonly Dictionary<string, byte[]> _memoryCache = new();
     private ResPath _cachePath = new();
     private ResPath _modelPath = new();
 
@@ -126,7 +126,7 @@ public sealed class TTSManager
     {
         WantedCount.Inc();
 
-        var key = $"{model}/{speaker}/{text}".GetHashCode();
+        var key = GetStableKey($"{model}/{speaker}/{text}");
         var cachedData = await TryGetCached(key);
         if (cachedData != null)
         {
@@ -207,7 +207,7 @@ public sealed class TTSManager
     {
         _sawmill.Debug($"ConvertTextToSpeechRadio: started for '{text}'");
 
-        var radioKey = $"radio/{model}/{speaker}/{text}".GetHashCode();
+        var radioKey = GetStableKey($"radio/{model}/{speaker}/{text}");
         var cached = await TryGetCached(radioKey);
         if (cached != null)
         {
@@ -231,7 +231,7 @@ public sealed class TTSManager
         return radioAudio;
     }
 
-    private bool TryCache(int key, byte[] file)
+    private bool TryCache(string key, byte[] file)
     {
         if (_cfg.GetCVar(GoobCVars.TTSCacheType) != "memory")
         {
@@ -263,7 +263,7 @@ public sealed class TTSManager
 
 
     /// Tries to find an existing audio file so we don't have to make another
-    private async Task<byte[]?> TryGetCached(int key)
+    private async Task<byte[]?> TryGetCached(string key)
     {
         var type = _cfg.GetCVar(GoobCVars.TTSCacheType);
         switch (type)
@@ -299,5 +299,11 @@ public sealed class TTSManager
             },
         }.Start();
         _memoryCache.Clear();
+    }
+
+    private static string GetStableKey(string input) // hash key for storing cached files, which stays the same even after restart
+    {
+        var bytes = System.Security.Cryptography.MD5.HashData(System.Text.Encoding.UTF8.GetBytes(input));
+        return Convert.ToHexString(bytes);
     }
 }

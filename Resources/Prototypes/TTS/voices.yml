@@ -193,3 +193,10 @@
   model: turbo
   sex: Male
   speaker: Thomas
+
+- type: ttsVoice
+  id: Obi
+  name: Obi
+  model: turbo
+  sex: Male
+  speaker: Obi
