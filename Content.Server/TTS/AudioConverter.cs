@@ -29,6 +29,13 @@ namespace Content.Server.TTS
                 using var process = Process.Start(ffmpeg)!;
                 process.WaitForExit();
 
+                if (process.ExitCode != 0)
+                {
+                    var stderr = process.StandardError.ReadToEnd();
+                    Logger.GetSawmill("tts").Error($"FFmpeg ConvertToOgg failed with exit code {process.ExitCode}: {stderr}");
+                    throw new Exception($"FFmpeg failed: {stderr}");
+                }
+
                 if (!File.Exists(outputPath))
                     throw new FileNotFoundException("FFmpeg did not produce an output file.");
 
@@ -80,6 +87,12 @@ namespace Content.Server.TTS
                 var stdoutTask = process.StandardOutput.ReadToEndAsync();
                 await Task.WhenAll(stderrTask, stdoutTask);
                 await process.WaitForExitAsync();
+
+                if (process.ExitCode != 0)
+                {
+                    Logger.GetSawmill("tts").Error($"FFmpeg failed with exit code {process.ExitCode}: {stderrTask.Result}");
+                    throw new Exception($"FFmpeg failed: {stderrTask.Result}");
+                }
 
                 if (!File.Exists(outputPath))
                     throw new FileNotFoundException("FFmpeg did not produce an output file.");
