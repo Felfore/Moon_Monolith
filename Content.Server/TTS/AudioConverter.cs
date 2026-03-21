@@ -9,8 +9,8 @@ namespace Content.Server.TTS
     {
         public static byte[] ConvertToOgg(byte[] inputAudioBytes)
         {
-            var inputPath = Path.GetTempFileName();
-            var outputPath = Path.ChangeExtension(Path.GetTempFileName(), ".ogg");
+            var inputPath = Path.Combine("/tmp", $"tts_in_{Guid.NewGuid()}.opus");
+            var outputPath = Path.Combine("/tmp", $"tts_out_{Guid.NewGuid()}.ogg");
 
             File.WriteAllBytes(inputPath, inputAudioBytes);
 
@@ -43,8 +43,8 @@ namespace Content.Server.TTS
 
         public static async Task<byte[]> ApplyRadioEffect(byte[] inputAudioBytes)
         {
-            var inputPath = Path.GetTempFileName();
-            var outputPath = Path.ChangeExtension(Path.GetTempFileName(), ".ogg");
+            var inputPath = Path.Combine("/tmp", $"tts_in_{Guid.NewGuid()}.ogg");
+            var outputPath = Path.Combine("/tmp", $"tts_out_{Guid.NewGuid()}.ogg");
 
             File.WriteAllBytes(inputPath, inputAudioBytes);
 
