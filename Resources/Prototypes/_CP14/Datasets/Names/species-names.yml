@@ -1,0 +1,59 @@
+# Goblin
+
+- type: dataset
+  id: CP14_Names_Goblin_Male_First
+  values:
+    - Aruguet
+    - Vanii
+    - Vanon
+    - Vuudaraj
+    - Goodruun
+    - Daavn
+    - Dabrak
+    - Daghiyi
+    - Jazaal
+    - Dravduul
+    - Duulan
+    - Kallaad
+    - Krakuul
+    - Crootad
+    - Mazaan
+    - Munta
+    - Nasaar
+    - Rakari
+    - Rexyite
+    - Tarik
+    - Taruuzh
+    - Tuun
+    - Fenik
+    - Chetin
+    - Haluun
+    - Haruuk
+
+- type: dataset
+  id: CP14_Names_Goblin_Female_First
+  values:
+    - Aaspar
+    - Aguus
+    - Belaluur
+    - Vali
+    - Vuun
+    - Grail
+    - Gaduul
+    - Denaal
+    - Jaluum
+    - Draraar
+    - Duusha
+    - Kelaal
+    - Mulaan
+    - Nasri
+    - Razu
+    - Ralin
+    - Rexin
+    - Senen
+    - Tajin
+    - Tuner
+    - Hashak
+    - Shadruor
+    - Ehaas
+    - Eluun

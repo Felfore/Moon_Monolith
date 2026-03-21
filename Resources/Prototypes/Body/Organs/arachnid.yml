@@ -24,6 +24,7 @@
   - type: Tag
     tags:
     - Meat
+    - Trash #moonstation
 
 - type: entity
   id: OrganArachnidStomach
@@ -114,6 +115,7 @@
     - Meat
     - Organ
     - Heart
+    - Trash #moonstation
 
 - type: entity
   id: OrganArachnidLiver
@@ -142,6 +144,7 @@
     - Meat
     - Organ
     - Liver
+    - Trash #moonstation
 
 - type: entity
   id: OrganArachnidKidneys
@@ -183,6 +186,7 @@
     - Meat
     - Organ
     - Eyes
+    - Trash #moonstation
   - type: Item
     size: Small
     heldPrefix: eyeballs

@@ -21,6 +21,8 @@ using Robust.Shared.Random;
 using Robust.Shared.Replays;
 using Robust.Shared.Utility;
 
+using Content.Server.TTS;
+
 namespace Content.Server.Radio.EntitySystems;
 
 /// <summary>
@@ -206,6 +208,8 @@ public sealed class RadioSystem : EntitySystem
         if (frequency == null) // Nuclear-14
             frequency = GetFrequency(messageSource, channel); // Nuclear-14
 
+        var radioReceivers = new List<ICommonSession>();
+
         while (canSend && radioQuery.MoveNext(out var receiver, out var radio, out var transform))
         {
             if (!radio.ReceiveAllChannels)
@@ -216,18 +220,15 @@ public sealed class RadioSystem : EntitySystem
             }
 
             if (!HasComp<GhostComponent>(receiver) && GetFrequency(receiver, channel) != frequency) // Nuclear-14
-                continue; // Nuclear-14
+                continue; // Nuclear -14
 
-            // if (!channel.LongRange && transform.MapID != sourceMapId && !radio.GlobalReceive)
-            //     continue;
-
-            // Check if within range for range-limited channels
+            // check if within range for range-limited channels
             if (channel.MaxRange.HasValue && channel.MaxRange.Value > 0)
             {
                 var sourcePos = Transform(radioSource).Coordinates;
                 var targetPos = transform.Coordinates;
 
-                // Check distance between sender and receiver
+                // check distance between sender and receiver
                 if (!sourcePos.TryDistance(EntityManager, targetPos, out var distance) || distance > channel.MaxRange.Value)
                     continue;
             }
@@ -246,7 +247,16 @@ public sealed class RadioSystem : EntitySystem
 
             // send the message
             RaiseLocalEvent(receiver, ref ev);
+
+            // Collect player sessions for TTS
+            var parent = Transform(receiver).ParentUid;
+            if (TryComp<ActorComponent>(parent, out var actor))
+                radioReceivers.Add(actor.PlayerSession);
         }
+
+        // Raise TTS event with all receivers
+        if (radioReceivers.Count > 0)
+            RaiseLocalEvent(new RadioSpokeEvent(messageSource, message, radioReceivers));
 
         if (name != Name(messageSource))
             _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Radio message from {ToPrettyString(messageSource):user} as {name} on {channel.LocalizedName}: {message}");

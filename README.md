@@ -2,9 +2,9 @@
 
 Monolith is a fork of [Frontier Station 14](https://github.com/new-frontiers-14/frontier-station-14) that runs on the [Robust Toolbox](https://github.com/space-wizards/RobustToolbox) engine written in C#.
 
-This is the primary repo for Monolith.
+This is the repo for a fork of Monolith for a small discord community.
 
-If you want to host or create content for Monolith, this is the repo you need. It contains both RobustToolbox and the content pack for development of new content packs.
+If you want to host or create content for Monolith, go to the [original Monolith repo here](https://github.com/Monolith-Station/Monolith). It contains both RobustToolbox and the content pack for development of new content packs.
 
 ## Links
 

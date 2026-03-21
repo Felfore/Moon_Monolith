@@ -23,6 +23,9 @@
           Quantity: 5
         - ReagentId: AmmoniaBlood
           Quantity: 5
+  - type: Tag
+    tags:
+    - Trash #moonstation
 
 - type: entity
   id: OrganHydrakinStomach

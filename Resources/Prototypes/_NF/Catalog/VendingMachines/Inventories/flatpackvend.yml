@@ -34,3 +34,7 @@
     JukeboxFlatpack: 4294967295 # Infinite - Mono
     AtmosDeviceFanDirectionalFlatpack: 4294967295 # Infinite - Mono
     MaterialSiloFlatpack: 4294967295 # Infinite - Mono
+    RDServerUSSPFlatpack: 4294967295 # Infinite - Moonserver
+    RDServerRogueFlatpack: 4294967295 # Infinite - Moonserver
+    RDServerTSFFlatpack: 4294967295 # Infinite - Moonserver
+    FactionLatheFlatpack: 4294967295 # Infinite - Moonserver

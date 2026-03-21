@@ -156,6 +156,18 @@ public sealed partial class SalvageSystem
                 return;
         }
 
+        // Moonolith addition start
+        var medicalTeleportSystem = EntityManager.System<Content.Server._NF.Implants.MedicalTeleportImplantSystem>();
+        var mobQuery = EntityQueryEnumerator<Content.Shared.Mobs.Components.MobStateComponent, TransformComponent>();
+        while (mobQuery.MoveNext(out var mobUid, out var _, out var mobXform))
+        {
+            if (mobXform.MapUid == ev.FromMapUid)
+            {
+                medicalTeleportSystem.TriggerEmergencyTeleport(mobUid);
+            }
+        }
+        // Moonolith addition end
+
         // Last shuttle has left so finish the mission.
         QueueDel(ev.FromMapUid.Value);
     }
@@ -269,6 +281,18 @@ public sealed partial class SalvageSystem
 
             if (remaining < TimeSpan.Zero)
             {
+                // Moonolith addition start
+                var mobQuery = EntityQueryEnumerator<Content.Shared.Mobs.Components.MobStateComponent, TransformComponent>();
+                var medicalTeleportSystem = EntityManager.System<Content.Server._NF.Implants.MedicalTeleportImplantSystem>();
+
+                while (mobQuery.MoveNext(out var mobUid, out var _, out var mobXform))
+                {
+                    if (mobXform.MapUid == uid)
+                    {
+                        medicalTeleportSystem.TriggerEmergencyTeleport(mobUid);
+                    }
+                }
+                // Moonolith addition end
                 QueueDel(uid);
             }
         }
