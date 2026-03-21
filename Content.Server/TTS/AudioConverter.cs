@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
@@ -27,10 +27,12 @@ namespace Content.Server.TTS
                 };
 
                 using var process = Process.Start(ffmpeg)!;
+                var stderr = process.StandardError.ReadToEnd();
+                var stdout = process.StandardOutput.ReadToEnd();
                 process.WaitForExit();
 
                 if (!File.Exists(outputPath))
-                    throw new FileNotFoundException("FFmpeg did not produce an output file.");
+                    throw new Exception($"FFmpeg failed to produce an output file. Exit code: {process.ExitCode}\nStdout: {stdout}\nStderr: {stderr}");
 
                 return File.ReadAllBytes(outputPath);
             }
@@ -50,25 +52,24 @@ namespace Content.Server.TTS
 
             try
             {
+                // We use a simpler filter string without internal quotes for better platform compatibility when UseShellExecute is false.
+                var filter = "[0:a]" +
+                             "aresample=8000," +
+                             "highpass=f=300:poles=2," +
+                             "lowpass=f=3400:poles=2," +
+                             "equalizer=f=1500:width_type=o:width=1.5:g=8," +
+                             "acompressor=threshold=-12dB:ratio=8:attack=0.5:release=30:makeup=4," +
+                             "acrusher=level_in=2:level_out=1:bits=12:mode=lin:aa=1," +
+                             "aresample=44100," +
+                             "loudnorm=I=-16:TP=-1.5:LRA=11" +
+                             "[radio];" +
+                             "aevalsrc=random(0)*0.04:sample_rate=44100[noise];" +
+                             "[radio][noise]amix=inputs=2:weights=1 0.1:duration=shortest[out]";
+
                 var ffmpeg = new ProcessStartInfo
                 {
                     FileName = "ffmpeg",
-                    Arguments = $"-y -i \"{inputPath}\" " +
-                                "-filter_complex " +
-                                "\"[0:a]" +
-                                "aresample=8000," +
-                                "highpass=f=300:poles=2," +
-                                "lowpass=f=3400:poles=2," +
-                                "equalizer=f=1500:width_type=o:width=1.5:g=8," +
-                                "acompressor=threshold=-12dB:ratio=8:attack=0.5:release=30:makeup=4," +
-                                "acrusher=level_in=2:level_out=1:bits=12:mode=lin:aa=1," +
-                                "aresample=44100," +
-                                "loudnorm=I=-16:TP=-1.5:LRA=11" +
-                                "[radio];" +
-                                "aevalsrc=random(0)*0.04:sample_rate=44100[noise];" +
-                                "[radio][noise]amix=inputs=2:weights=1 0.1:duration=shortest[out]\" " +
-                                "-map \"[out]\" " +
-                                $"-c:a libvorbis \"{outputPath}\"",
+                    Arguments = $"-y -i \"{inputPath}\" -filter_complex \"{filter}\" -map \"[out]\" -c:a libvorbis \"{outputPath}\"",
                     UseShellExecute = false,
                     CreateNoWindow = true,
                     RedirectStandardError = true,
@@ -82,7 +83,7 @@ namespace Content.Server.TTS
                 await process.WaitForExitAsync();
 
                 if (!File.Exists(outputPath))
-                    throw new FileNotFoundException("FFmpeg did not produce an output file.");
+                    throw new Exception($"FFmpeg failed to produce an output file for radio effect. Exit code: {process.ExitCode}\nStdout: {stdoutTask.Result}\nStderr: {stderrTask.Result}");
 
                 return File.ReadAllBytes(outputPath);
             }

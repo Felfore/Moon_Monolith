@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Content.Server.Chat.Systems;
 using Content.Server.Radio.EntitySystems;
 using Content.Shared._Goobstation.CCVars;
@@ -139,10 +139,15 @@ public sealed partial class TTSSystem : EntitySystem
         _sawmill.Debug($"ProcessRadioTTS started, message='{message}'");
         try
         {
+            _sawmill.Debug($"ProcessRadioTTS: calling ConvertTextToSpeechRadio for {sessions.Count} sessions");
             var radioAudio = await _ttsManager.ConvertTextToSpeechRadio(model, speaker, message);
             if (radioAudio is null)
+            {
+                _sawmill.Warning($"ProcessRadioTTS: ConvertTextToSpeechRadio returned null for message '{message}'");
                 return;
+            }
 
+            _sawmill.Debug($"ProcessRadioTTS: raising PlayTTSEvent for {sessions.Count} sessions");
             var ttsEvent = new PlayTTSEvent(radioAudio, GetNetEntity(source), isRadio: true);
             foreach (var session in sessions)
                 RaiseNetworkEvent(ttsEvent, session);
