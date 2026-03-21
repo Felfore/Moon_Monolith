@@ -235,7 +235,7 @@ public sealed class TTSManager
     {
         if (_cfg.GetCVar(GoobCVars.TTSCacheType) != "memory")
         {
-            var files = Directory.GetFiles(_cachePath + ResPath.SystemSeparatorStr).ToList()
+            var files = Directory.GetFiles(_cachePath.ToString()).ToList()
                 .OrderBy(f => File.GetLastWriteTimeUtc(f).Ticks);
             var count = files.Count();
             var toDelete = count - _cfg.GetCVar(GoobCVars.TTSMaxCached);
@@ -245,7 +245,7 @@ public sealed class TTSManager
                 File.Delete(files.ElementAt(i));
             }
 
-            var filePath = _cachePath + ResPath.SystemSeparatorStr + key + ".ogg";
+            var filePath = Path.Combine(_cachePath.ToString(), key + ".ogg");
             File.WriteAllBytes(filePath, file);
 
             return true;
@@ -269,7 +269,7 @@ public sealed class TTSManager
         switch (type)
         {
             case "file":
-                var path = _cachePath + ResPath.SystemSeparatorStr + key + ".ogg";
+                var path = Path.Combine(_cachePath.ToString(), key + ".ogg");
                 return !File.Exists(path) ? null : await File.ReadAllBytesAsync(path);
             case "memory":
                 return _memoryCache.GetValueOrDefault(key);
