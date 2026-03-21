@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using Content.Shared._Goobstation.CCVars;
 using Content.Shared.TTS;
 using Robust.Client.Audio;
@@ -73,6 +73,8 @@ public sealed class TTSSystem : EntitySystem
             _sawmill.Error("Received empty TTS audio data");
             return;
         }
+
+        _sawmill.Debug($"OnPlayTTS: isWhisper={ev.IsWhisper}, isRadio={ev.IsRadio}, source={ev.SourceUid}");
 
         // Load the OGG/Opus audio bytes directly
         using var stream = new MemoryStream(ev.Data);

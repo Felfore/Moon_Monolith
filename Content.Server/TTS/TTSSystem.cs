@@ -183,7 +183,7 @@ public sealed partial class TTSSystem : EntitySystem
                 continue;
             var xform = xformQuery.GetComponent(session.AttachedEntity.Value);
             var distance = (sourcePos - _xforms.GetWorldPosition(xform, xformQuery)).Length();
-            if (distance > 10 * 10)
+            if (distance > 7)
                 continue;
 
             RaiseNetworkEvent(fullTtsEvent, session);
@@ -205,7 +205,7 @@ public sealed partial class TTSSystem : EntitySystem
         var textSsml = ToSsmlText(textSanitized, ssmlTraits);
 
         // return await _ttsManager.ConvertTextToSpeech(speaker, textSsml); //TODO: What is this ssml?
-        return await _ttsManager.ConvertTextToSpeech(model, speaker, textSanitized);
+        return await _ttsManager.ConvertTextToSpeech(model, speaker, textSsml);
     }
 }
 
