@@ -200,3 +200,31 @@
   model: turbo
   sex: Male
   speaker: Obi
+
+- type: ttsVoice
+  id: Moonmoon
+  name: Moonmoon
+  model: turbo
+  sex: Male
+  speaker: Moonmoon
+
+- type: ttsVoice
+  id: Vegeta
+  name: Vegeta
+  model: turbo
+  sex: Male
+  speaker: Vegeta
+
+- type: ttsVoice
+  id: Miku
+  name: Miku
+  model: turbo
+  sex: Female
+  speaker: Miku
+
+- type: ttsVoice
+  id: Snake
+  name: Snake
+  model: turbo
+  sex: Male
+  speaker: Snake
