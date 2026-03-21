@@ -9,8 +9,8 @@ namespace Content.Server.TTS
     {
         public static byte[] ConvertToOgg(byte[] inputAudioBytes)
         {
-            var inputPath = Path.Combine("/tmp", $"tts_in_{Guid.NewGuid()}.opus");
-            var outputPath = Path.Combine("/tmp", $"tts_out_{Guid.NewGuid()}.ogg");
+            var inputPath = Path.Combine(Path.GetTempPath(), $"tts_in_{Guid.NewGuid()}.opus");
+            var outputPath = Path.Combine(Path.GetTempPath(), $"tts_out_{Guid.NewGuid()}.ogg");
 
             File.WriteAllBytes(inputPath, inputAudioBytes);
 
@@ -50,8 +50,8 @@ namespace Content.Server.TTS
 
         public static async Task<byte[]> ApplyRadioEffect(byte[] inputAudioBytes)
         {
-            var inputPath = Path.Combine("/tmp", $"tts_in_{Guid.NewGuid()}.ogg");
-            var outputPath = Path.Combine("/tmp", $"tts_out_{Guid.NewGuid()}.ogg");
+            var inputPath = Path.Combine(Path.GetTempPath(), $"tts_in_{Guid.NewGuid()}.ogg");
+            var outputPath = Path.Combine(Path.GetTempPath(), $"tts_out_{Guid.NewGuid()}.ogg");
 
             File.WriteAllBytes(inputPath, inputAudioBytes);
 
@@ -83,16 +83,7 @@ namespace Content.Server.TTS
                 };
 
                 using var process = Process.Start(ffmpeg)!;
-                var stderrTask = process.StandardError.ReadToEndAsync();
-                var stdoutTask = process.StandardOutput.ReadToEndAsync();
-                await Task.WhenAll(stderrTask, stdoutTask);
                 await process.WaitForExitAsync();
-
-                if (process.ExitCode != 0)
-                {
-                    Logger.GetSawmill("tts").Error($"FFmpeg failed with exit code {process.ExitCode}: {stderrTask.Result}");
-                    throw new Exception($"FFmpeg failed: {stderrTask.Result}");
-                }
 
                 if (!File.Exists(outputPath))
                     throw new FileNotFoundException("FFmpeg did not produce an output file.");
