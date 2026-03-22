@@ -40,6 +40,8 @@
       collection: FelinidGrowls
     Purr:
       collection: FelinidPurrs
+    CatTrill:
+      collection: FelionoidTrills
     Gasp:
       collection: MaleGasp
     DefaultDeathgasp:
@@ -86,6 +88,8 @@
       collection: FelinidGrowls
     Purr:
       collection: FelinidPurrs
+    CatTrill:
+      collection: FelionoidTrills
     Gasp:
       collection: FemaleGasp
     DefaultDeathgasp:

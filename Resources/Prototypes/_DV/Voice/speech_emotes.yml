@@ -215,3 +215,22 @@
     - awoos
     - awooing
     - awooed
+
+- type: emote
+  id: CatTrill
+  name: chat-emote-name-cat-trill
+  category: Vocal
+  available: false
+  icon: { sprite: _Starlight/Actions/felionoid.rsi, state: cat_print }
+  whitelist:
+    components:
+    - Vocal
+  blacklist:
+    components:
+    - BorgChassis
+  chatMessages: ["chat-emote-msg-cat-trill"]
+  chatTriggers:
+    - trill
+    - trills
+    - trilling
+    - trilled
