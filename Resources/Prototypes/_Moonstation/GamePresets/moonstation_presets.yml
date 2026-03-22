@@ -11,4 +11,8 @@
   - MoonstationBluespaceDungeonScheduler
   - MoonstationBluespaceSalvageScheduler
   - MoonstationSmugglingScheduler
+  - MoonstationChimeraSTCScheduler
+  - MoonstationAISTCScheduler
+  - MoonstationAISTCTier2Scheduler
+  - MoonstationAsakimSTCScheduler
   - MoonstationMonolithicScheduler
