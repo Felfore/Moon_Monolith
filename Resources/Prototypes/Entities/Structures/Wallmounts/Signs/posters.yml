@@ -796,6 +796,15 @@
 
 - type: entity
   parent: PosterBase
+  id: PosterLegitHelio
+  name: "Helio"
+  description: "A poster of a scurret, a small, agile sapient species. It's legally distinct from any other scurret-like creatures."
+  components:
+  - type: Sprite
+    state: poster55_legit
+
+- type: entity
+  parent: PosterBase
   id: PosterLegitReportCrimes
   name: "Report Crimes"
   description: "A poster encouraging the swift reporting of crime or seditious behavior to station security."

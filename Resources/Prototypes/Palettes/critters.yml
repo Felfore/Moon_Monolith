@@ -41,3 +41,14 @@
     HornA: "#d4c8bf"
     hornB: "#eec7ab"
     hornC: "#ad9584"
+
+- type: palette
+  id: ScurretColors
+  name: ScurretColors
+  colors:
+    ScurretA: "#7a5c53"
+    ScurretB: "#856033"
+    ScurretC: "#4a3c32"
+    ScurretD: "#746353"
+    ScurretE: "#716a65"
+    ScurretF: "#6e6e6e"

@@ -164,3 +164,12 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitColorGrey
     shoes: ClothingShoesColorBlack
+
+- type: startingGear
+  id: EmotionalSupportScurretGear
+  equipment:
+    head: ClothingHeadHatHardhatYellow
+    neck: ClothingNeckMantleQM
+    jumpsuit: ClothingUniformJumpsuitCargo
+    id: CargoPDA
+    ears: ClothingHeadsetCargo
