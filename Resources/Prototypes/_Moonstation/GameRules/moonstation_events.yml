@@ -191,6 +191,11 @@
 - type: entity
   id: MoonBluespaceCacheError
   parent: BluespaceCacheError
+  components:
+  - type: StationEvent
+    minimumPlayers: 3
+  - type: GameRule
+    minPlayers: 3
 
 # Inherits from BluespaceVaultError.
 # Effect: Spawns a Secure NT Vault POI (~1.5km - 5km distance).
@@ -198,6 +203,11 @@
 - type: entity
   id: MoonBluespaceVaultError
   parent: BluespaceVaultError
+  components:
+  - type: StationEvent
+    minimumPlayers: 3
+  - type: GameRule
+    minPlayers: 3
 
 # Inherits from BluespaceVaultSmallError.
 # Effect: Spawns a smaller Secure NT Vault POI.
@@ -205,6 +215,11 @@
 - type: entity
   id: MoonBluespaceVaultSmallError
   parent: BluespaceVaultSmallError
+  components:
+  - type: StationEvent
+    minimumPlayers: 2
+  - type: GameRule
+    minPlayers: 2
 
 # Inherits from BluespaceSyndicateFTLInterception.
 # Effect: Spawns an Unidentified Syndicate Vessel (~1.5km - 2.5km distance).
@@ -212,6 +227,11 @@
 - type: entity
   id: MoonBluespaceSyndicateFTLInterception
   parent: BluespaceSyndicateFTLInterception
+  components:
+  - type: StationEvent
+    minimumPlayers: 2
+  - type: GameRule
+    minPlayers: 2
 
 # Inherits from BluespacePreFractureFTLInterception.
 # Effect: Spawns a Pre-Fracture Unidentified Vessel (~2.5km - 4km distance).
@@ -219,6 +239,11 @@
 - type: entity
   id: MoonBluespacePreFractureFTLInterception
   parent: BluespacePreFractureFTLInterception
+  components:
+  - type: StationEvent
+    minimumPlayers: 2
+  - type: GameRule
+    minPlayers: 2
 
 # Inherits from BluespaceDungeonBasalt.
 # Effect: Spawns a Basalt Dungeon sector. Claimable grid.
@@ -226,6 +251,11 @@
 - type: entity
   id: MoonBluespaceDungeonBasalt
   parent: BluespaceDungeonBasalt
+  components:
+  - type: StationEvent
+    minimumPlayers: 1
+  - type: GameRule
+    minPlayers: 1
 
 # Inherits from BluespaceDungeonChromite.
 # Effect: Spawns a Chromite Dungeon sector. Claimable grid.
@@ -233,6 +263,11 @@
 - type: entity
   id: MoonBluespaceDungeonChromite
   parent: BluespaceDungeonChromite
+  components:
+  - type: StationEvent
+    minimumPlayers: 1
+  - type: GameRule
+    minPlayers: 1
 
 # Inherits from BluespaceDungeonSnow.
 # Effect: Spawns a Snow Dungeon sector. Claimable grid.
@@ -240,6 +275,11 @@
 - type: entity
   id: MoonBluespaceDungeonSnow
   parent: BluespaceDungeonSnow
+  components:
+  - type: StationEvent
+    minimumPlayers: 1
+  - type: GameRule
+    minPlayers: 1
 
 # Inherits from BluespaceDungeonCave.
 # Effect: Spawns a standard Cave Dungeon sector. Claimable grid.
@@ -247,6 +287,11 @@
 - type: entity
   id: MoonBluespaceDungeonCave
   parent: BluespaceDungeonCave
+  components:
+  - type: StationEvent
+    minimumPlayers: 1
+  - type: GameRule
+    minPlayers: 1
 
 # Inherits from BluespaceDungeonScrap.
 # Effect: Spawns a Scrap Dungeon sector. Claimable grid.
@@ -254,6 +299,11 @@
 - type: entity
   id: MoonBluespaceDungeonScrap
   parent: BluespaceDungeonScrap
+  components:
+  - type: StationEvent
+    minimumPlayers: 1
+  - type: GameRule
+    minPlayers: 1
 
 
 # ---------------------------------------------------------------------
@@ -266,6 +316,11 @@
 - type: entity
   id: MoonBluespaceSalvage
   parent: BluespaceSalvage
+  components:
+  - type: StationEvent
+    minimumPlayers: 1
+  - type: GameRule
+    minPlayers: 1
 
 # Inherits from SmugglingFaxBig.
 # Effect: Sends 4-5 high-priority dead-drop hints via fax.
@@ -273,6 +328,11 @@
 - type: entity
   id: MoonSmugglingFaxBig
   parent: SmugglingFaxBig
+  components:
+  - type: StationEvent
+    minimumPlayers: 1
+  - type: GameRule
+    minPlayers: 1
 
 
 # ---------------------------------------------------------------------
