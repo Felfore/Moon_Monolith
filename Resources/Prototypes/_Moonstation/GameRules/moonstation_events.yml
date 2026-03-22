@@ -174,7 +174,7 @@
       max: 3
   - type: VentCrittersRule
     entries:
-    - id: MobAdultSlimesBlue
+    - id: MobAdultSlimesBlueAngry
       prob: 0.015
     - id: MobGiantSpiderAngry
       prob: 0.015
