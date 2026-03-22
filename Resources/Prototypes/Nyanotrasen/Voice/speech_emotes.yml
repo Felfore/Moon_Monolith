@@ -3,7 +3,7 @@
   id: Hiss
   category: Vocal
   name: Hiss
-  icon: Interface/Actions/scream.png
+  icon: { sprite: _Starlight/Actions/felionoid.rsi, state: cat_print }
   available: false
   whitelist:
     components:
@@ -27,7 +27,7 @@
   id: Meow
   category: Vocal
   name: Meow
-  icon: Interface/Actions/scream.png
+  icon: { sprite: _Starlight/Actions/felionoid.rsi, state: cat_print }
   available: false
   whitelist:
     components:
@@ -69,7 +69,7 @@
   id: Mew
   category: Vocal
   name: Mew
-  icon: Interface/Actions/scream.png
+  icon: { sprite: _Starlight/Actions/felionoid.rsi, state: cat_print }
   available: false
   whitelist:
     components:
@@ -107,7 +107,7 @@
   id: Purr
   category: Vocal
   name: Purr
-  icon: Interface/Actions/scream.png
+  icon: { sprite: _Starlight/Actions/felionoid.rsi, state: cat_print }
   available: false
   whitelist:
     components:
