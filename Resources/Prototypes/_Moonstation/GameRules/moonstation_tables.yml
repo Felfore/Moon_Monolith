@@ -12,14 +12,9 @@
   id: MoonBasicCalmEventsTable
   table: !type:AllSelector
     children:
-      - id: MoonCockroachMigration
       - id: MoonGasLeak
-      - id: MoonMouseMigration
       - id: MoonSolarFlare
       - id: MoonVentClog
-      - id: MoonBluespaceCargoCrate
-      - id: MoonBluespaceMcCargoCrate
-      - id: MoonBluespaceSyndicateCrate
       - id: MoonSmugglingFax
 
 - type: entityTable
@@ -29,6 +24,7 @@
       - id: MoonSnailMigrationLowPop
       - id: MoonCockroachMigration
       - id: MoonMouseMigration
+      - id: MoonSpiderSlimeMigration
 
 # Bluespace Tables
 - type: entityTable
