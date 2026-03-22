@@ -1,0 +1,18 @@
+- type: gamePreset
+  id: MoonstationMixed
+  name: moonstation-mixed-title
+  description: moonstation-mixed-description
+  showInVote: true
+  rules:
+  - NFAdventure
+  - BasicRoundstartVariation
+  - MoonstationBasicEventScheduler
+  - MoonstationBluespaceEventScheduler
+  - MoonstationBluespaceDungeonScheduler
+  - MoonstationBluespaceSalvageScheduler
+  - MoonstationSmugglingScheduler
+  - MoonstationChimeraSTCScheduler
+  - MoonstationAISTCScheduler
+  - MoonstationAISTCTier2Scheduler
+  - MoonstationAsakimSTCScheduler
+  - MoonstationMonolithicScheduler
