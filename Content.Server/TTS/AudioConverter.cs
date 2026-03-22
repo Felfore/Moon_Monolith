@@ -33,7 +33,6 @@ namespace Content.Server.TTS
 
                 if (process.ExitCode != 0)
                 {
-                    var stderr = process.StandardError.ReadToEnd();
                     Logger.GetSawmill("tts").Error($"FFmpeg ConvertToOgg failed with exit code {process.ExitCode}: {stderr}");
                     throw new Exception($"FFmpeg failed: {stderr}");
                 }
@@ -84,10 +83,14 @@ namespace Content.Server.TTS
                 };
 
                 using var process = Process.Start(ffmpeg)!;
+                var stdoutTask = process.StandardOutput.ReadToEndAsync();
+                var stderrTask = process.StandardError.ReadToEndAsync();
                 await process.WaitForExitAsync();
+                var stdout = await stdoutTask;
+                var stderr = await stderrTask;
 
                 if (!File.Exists(outputPath))
-                    throw new Exception($"FFmpeg failed to produce an output file for radio effect. Exit code: {process.ExitCode}\nStdout: {stdoutTask.Result}\nStderr: {stderrTask.Result}");
+                    throw new Exception($"FFmpeg failed to produce an output file for radio effect. Exit code: {process.ExitCode}\nStdout: {stdout}\nStderr: {stderr}");
 
                 return File.ReadAllBytes(outputPath);
             }
