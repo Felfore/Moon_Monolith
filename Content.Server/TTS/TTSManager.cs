@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -180,7 +180,7 @@ public sealed class TTSManager
                 var audioBytes = await response.Content.ReadAsByteArrayAsync();
 
                 // Convert TTS to .ogg file for compatability
-                audioBytes = AudioConverter.ConvertToOgg(audioBytes);
+                audioBytes = await AudioConverter.ConvertToOggAsync(audioBytes);
 
                 TryCache(key, audioBytes);
                 RequestTimings.WithLabels("API").Observe((DateTime.UtcNow - reqTime).TotalSeconds);

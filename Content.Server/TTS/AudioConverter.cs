@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
@@ -7,7 +7,7 @@ namespace Content.Server.TTS
 {
     public static class AudioConverter
     {
-        public static byte[] ConvertToOgg(byte[] inputAudioBytes)
+        public static async Task<byte[]> ConvertToOggAsync(byte[] inputAudioBytes)
         {
             var inputPath = Path.Combine(Path.GetTempPath(), $"tts_in_{Guid.NewGuid()}.opus");
             var outputPath = Path.Combine(Path.GetTempPath(), $"tts_out_{Guid.NewGuid()}.ogg");
@@ -27,17 +27,21 @@ namespace Content.Server.TTS
                 };
 
                 using var process = Process.Start(ffmpeg)!;
-                process.WaitForExit();
+                var stderrTask = process.StandardError.ReadToEndAsync();
+                var stdoutTask = process.StandardOutput.ReadToEndAsync();
+                await process.WaitForExitAsync();
+
+                var stderr = await stderrTask;
+                var stdout = await stdoutTask;
 
                 if (process.ExitCode != 0)
                 {
-                    var stderr = process.StandardError.ReadToEnd();
                     Logger.GetSawmill("tts").Error($"FFmpeg ConvertToOgg failed with exit code {process.ExitCode}: {stderr}");
                     throw new Exception($"FFmpeg failed: {stderr}");
                 }
 
                 if (!File.Exists(outputPath))
-                    throw new FileNotFoundException("FFmpeg did not produce an output file.");
+                    throw new Exception($"FFmpeg failed to produce an output file. Exit code: {process.ExitCode}\nStdout: {stdout}\nStderr: {stderr}");
 
                 return File.ReadAllBytes(outputPath);
             }
@@ -83,10 +87,15 @@ namespace Content.Server.TTS
                 };
 
                 using var process = Process.Start(ffmpeg)!;
+                var stdoutTask = process.StandardOutput.ReadToEndAsync();
+                var stderrTask = process.StandardError.ReadToEndAsync();
                 await process.WaitForExitAsync();
 
+                var stdout = await stdoutTask;
+                var stderr = await stderrTask;
+
                 if (!File.Exists(outputPath))
-                    throw new FileNotFoundException("FFmpeg did not produce an output file.");
+                    throw new Exception($"FFmpeg failed to produce an output file for radio effect. Exit code: {process.ExitCode}\nStdout: {stdout}\nStderr: {stderr}");
 
                 return File.ReadAllBytes(outputPath);
             }

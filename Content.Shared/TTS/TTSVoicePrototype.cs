@@ -1,4 +1,4 @@
-﻿using Content.Shared.Humanoid;
+using Content.Shared.Humanoid;
 using Content.Shared.Prototypes;
 using Robust.Shared.Prototypes;
 
@@ -6,13 +6,13 @@ namespace Content.Shared.TTS;
 
 [Prototype("ttsVoice")]
 // ReSharper disable once InconsistentNaming
-public sealed class TTSVoicePrototype : IPrototype
+public sealed partial class TTSVoicePrototype : IPrototype
 {
     [IdDataField]
-    public string ID { get; } = default!;
+    public string ID { get; private set; } = default!;
 
     [DataField("name")]
-    public string Name { get; } = string.Empty;
+    public string Name { get; private set; } = string.Empty;
 
     [DataField(required: true)]
     public Sex Sex;
