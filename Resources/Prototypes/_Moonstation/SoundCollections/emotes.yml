@@ -2,3 +2,10 @@
   id: RodentiaScreams
   files:
   - /Audio/_DV/Voice/Rodentia/Rat_Scream_01.ogg
+
+- type: soundCollection
+  id: FelionoidTrills
+  files:
+  - /Audio/_Starlight/Voice/Felionoid/cat_trill1.ogg
+  - /Audio/_Starlight/Voice/Felionoid/cat_trill2.ogg
+  - /Audio/_Starlight/Voice/Felionoid/cat_trill3.ogg

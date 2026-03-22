@@ -47,6 +47,7 @@
     - Mew
     - Growl
     - Purr
+    - CatTrill
   - type: LanguageKnowledge # Einstein Engines - Languages
     speaks:
     - TauCetiBasic
