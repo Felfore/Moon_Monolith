@@ -9,8 +9,8 @@ namespace Content.Server.TTS
     {
         public static byte[] ConvertToOgg(byte[] inputAudioBytes)
         {
-            var inputPath = Path.GetTempFileName();
-            var outputPath = Path.ChangeExtension(Path.GetTempFileName(), ".ogg");
+            var inputPath = Path.Combine(Path.GetTempPath(), $"tts_in_{Guid.NewGuid()}.opus");
+            var outputPath = Path.Combine(Path.GetTempPath(), $"tts_out_{Guid.NewGuid()}.ogg");
 
             File.WriteAllBytes(inputPath, inputAudioBytes);
 
@@ -31,6 +31,13 @@ namespace Content.Server.TTS
                 var stdout = process.StandardOutput.ReadToEnd();
                 process.WaitForExit();
 
+                if (process.ExitCode != 0)
+                {
+                    var stderr = process.StandardError.ReadToEnd();
+                    Logger.GetSawmill("tts").Error($"FFmpeg ConvertToOgg failed with exit code {process.ExitCode}: {stderr}");
+                    throw new Exception($"FFmpeg failed: {stderr}");
+                }
+
                 if (!File.Exists(outputPath))
                     throw new Exception($"FFmpeg failed to produce an output file. Exit code: {process.ExitCode}\nStdout: {stdout}\nStderr: {stderr}");
 
@@ -45,8 +52,8 @@ namespace Content.Server.TTS
 
         public static async Task<byte[]> ApplyRadioEffect(byte[] inputAudioBytes)
         {
-            var inputPath = Path.GetTempFileName();
-            var outputPath = Path.ChangeExtension(Path.GetTempFileName(), ".ogg");
+            var inputPath = Path.Combine(Path.GetTempPath(), $"tts_in_{Guid.NewGuid()}.ogg");
+            var outputPath = Path.Combine(Path.GetTempPath(), $"tts_out_{Guid.NewGuid()}.ogg");
 
             File.WriteAllBytes(inputPath, inputAudioBytes);
 
@@ -77,9 +84,6 @@ namespace Content.Server.TTS
                 };
 
                 using var process = Process.Start(ffmpeg)!;
-                var stderrTask = process.StandardError.ReadToEndAsync();
-                var stdoutTask = process.StandardOutput.ReadToEndAsync();
-                await Task.WhenAll(stderrTask, stdoutTask);
                 await process.WaitForExitAsync();
 
                 if (!File.Exists(outputPath))
