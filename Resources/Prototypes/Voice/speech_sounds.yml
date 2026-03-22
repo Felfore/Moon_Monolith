@@ -177,12 +177,3 @@
     path: /Audio/_Goobstation/Voice/Chrono/dagger.ogg
   exclaimSound:
     path: /Audio/_Goobstation/Voice/Chrono/contact.ogg
-
-- type: speechSounds
-  id: Wawa
-  saySound:
-    path: /Audio/Animals/wawa_statement.ogg
-  askSound:
-    path: /Audio/Animals/wawa_question.ogg
-  exclaimSound:
-    path: /Audio/Animals/wawa_exclaim.ogg

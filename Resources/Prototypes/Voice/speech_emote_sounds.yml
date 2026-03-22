@@ -671,19 +671,3 @@
     path: /Audio/Animals/goat_bah.ogg
     params:
       variation: 0.125
-
-- type: emoteSounds
-  id: Scurret
-  params:
-    variation: 0.125
-  sounds:
-    Laugh:
-      collection: WawaLaugh
-    Sneeze:
-      collection: WawaSneeze
-    Sigh:
-      collection: WawaSigh
-    Scream:
-      collection: WawaScream
-    Gasp:
-      path: /Audio/Animals/wawa_chatter.ogg
