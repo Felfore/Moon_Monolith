@@ -31,12 +31,14 @@
   id: CatMeow
   name: chat-emote-name-catmeow
   category: Vocal
+  icon: { sprite: _Starlight/Actions/felionoid.rsi, state: cat_print }
   chatMessages: ["chat-emote-msg-catmeow"]
 
 - type: emote
   id: CatHisses
   name: chat-emote-name-cathisses
   category: Vocal
+  icon: { sprite: _Starlight/Actions/felionoid.rsi, state: cat_print }
   chatMessages: ["chat-emote-msg-cathisses"]
 
 - type: emote
