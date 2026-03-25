@@ -43,6 +43,7 @@
   components:
   - type: Organ
     onAdd:
+    - type: SolutionScanner
     - type: FlashImmunity
     - type: EyeProtection
     - type: ShowHealthBars

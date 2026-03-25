@@ -10,4 +10,14 @@
     Glass: 300
     Gold: 300
     Silver: 300
-    Plasma: 300 
+    Plasma: 300
+
+- type: latheRecipe
+  id: ClothingHandsGlovesSurgical
+  result: ClothingHandsGlovesSurgical
+  completetime: 2
+  materials:
+    Plastic: 300
+    Durathread: 300
+    Cloth: 300
+    BSCrystal: 100
