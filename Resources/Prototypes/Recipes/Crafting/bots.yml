@@ -101,3 +101,16 @@
   icon:
     sprite: Mobs/Silicon/Bots/supplybot.rsi
     state: supplybot
+
+- type: construction
+  name: plantbot
+  id: plantbot
+  graph: PlantBot
+  startNode: start
+  targetNode: bot
+  category: construction-category-utilities
+  objectType: Item
+  description: This bot takes care of the plants.
+  icon:
+    sprite: Mobs/Silicon/Bots/plantbot.rsi
+    state: plantbot
