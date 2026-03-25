@@ -23,8 +23,8 @@
         type: PlantAnalyzerBoundUserInterface
   - type: PlantAnalyzer
     settings:
-      scanDelay: 4 #Mono 10 >> 4
-      advScanDelay: 6 #Mono 20 >> 6
+      scanDelay: 1 #Mono 10 >> 4 #Moonolith >> 1
+      advScanDelay: 1 #Mono 20 >> 6 #Moonolith >> 1
     scanningEndSound:
       path: "/Audio/Items/Medical/healthscanner.ogg"
   - type: Appearance
