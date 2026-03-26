@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using Content.Shared._Goobstation.CCVars;
 using Content.Shared.TTS;
 using Robust.Client.Audio;
@@ -22,7 +22,6 @@ public sealed class TTSSystem : EntitySystem
     [Dependency] private readonly IAudioManager _audioInt = default!;
 
     private ISawmill _sawmill = default!;
-    private readonly MemoryContentRoot _contentRoot = new();
     private static readonly ResPath Prefix = ResPath.Root ;/// "";
 
     /// <summary>
@@ -41,7 +40,6 @@ public sealed class TTSSystem : EntitySystem
     public override void Initialize()
     {
         _sawmill = Logger.GetSawmill("tts");
-        _res.AddRoot(Prefix, _contentRoot);
         _cfg.OnValueChanged(GoobCVars.TTSVolume, OnTtsVolumeChanged, true);
         SubscribeNetworkEvent<PlayTTSEvent>(OnPlayTTS);
     }
@@ -50,7 +48,6 @@ public sealed class TTSSystem : EntitySystem
     {
         base.Shutdown();
         _cfg.UnsubValueChanged(GoobCVars.TTSVolume, OnTtsVolumeChanged);
-        _contentRoot.Dispose();
     }
 
     public void RequestPreviewTTS(string voiceId)
