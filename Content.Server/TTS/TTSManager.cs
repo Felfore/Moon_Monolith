@@ -14,10 +14,12 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 
+using Robust.Shared.IoC;
+
 namespace Content.Server.TTS;
 
 // ReSharper disable once InconsistentNaming
-public sealed class TTSManager
+public sealed class TTSManager : IPostInjectInit
 {
     private static readonly Histogram RequestTimings = Metrics.CreateHistogram(
         "tts_req_timings",
@@ -50,12 +52,18 @@ public sealed class TTSManager
 
     public TTSManager()
     {
+    }
+
+    void IPostInjectInit.PostInject()
+    {
         Initialize();
     }
 
     private void Initialize()
     {
-        IoCManager.InjectDependencies(this);
+        if (!_cfg.IsCVarRegistered(GoobCVars.TTSCachePath.Name))
+            return;
+
         _sawmill = Logger.GetSawmill("tts");
 
         _cachePath = MakeDataPath(_cfg.GetCVar(GoobCVars.TTSCachePath));
