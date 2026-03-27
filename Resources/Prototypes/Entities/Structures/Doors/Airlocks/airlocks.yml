@@ -310,15 +310,15 @@
   - type: Wires
     layoutId: AirlockCargo
 
-- type: entity
-  parent: AirlockGlass
-  id: AirlockSalvageGlass
-  suffix: Salvage
-  components:
-  - type: Sprite
-    sprite: Structures/Doors/Airlocks/Glass/salvage.rsi
-  - type: Wires
-    layoutId: AirlockCargo
+# - type: entity
+#   parent: AirlockGlass
+#   id: AirlockSalvageGlass
+#   suffix: Salvage
+#   components:
+#   - type: Sprite
+#     sprite: Structures/Doors/Airlocks/Glass/salvage.rsi
+#   - type: Wires
+#     layoutId: AirlockCargo
 
 - type: entity
   parent: AirlockGlass
