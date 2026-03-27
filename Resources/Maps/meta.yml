@@ -11927,6 +11927,7 @@ entities:
       parent: 5350
     - type: PaintableAirlock
       department: Medical
+      group: Glass
     - type: AccessReader
       access:
       - - Medical

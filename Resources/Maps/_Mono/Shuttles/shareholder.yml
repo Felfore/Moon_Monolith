@@ -255,6 +255,7 @@ entities:
       parent: 1
     - type: PaintableAirlock
       department: Cargo
+      group: Standard
 - proto: AirlockGlassShuttle
   entities:
   - uid: 5
