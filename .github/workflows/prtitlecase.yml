@@ -4,20 +4,17 @@ on:
     types: [opened, edited, synchronize]
 
 env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
   PR_NUMBER: ${{ github.event.pull_request.number }}
 
 jobs:
   prtitlecase:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
     steps:
       - name: Checkout Master
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.BOT_TOKEN }}
 
       - name: Setup Node
         uses: actions/setup-node@v3
