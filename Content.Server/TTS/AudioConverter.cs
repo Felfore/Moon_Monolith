@@ -26,6 +26,7 @@ namespace Content.Server.TTS
                     RedirectStandardOutput = true
                 };
 
+                Logger.GetSawmill("tts").Debug($"FFmpeg ConvertToOgg: running command '{ffmpeg.FileName} {ffmpeg.Arguments}'");
                 using var process = Process.Start(ffmpeg)!;
                 var stderrTask = process.StandardError.ReadToEndAsync();
                 var stdoutTask = process.StandardOutput.ReadToEndAsync();
@@ -86,6 +87,7 @@ namespace Content.Server.TTS
                     RedirectStandardOutput = true
                 };
 
+                Logger.GetSawmill("tts").Debug($"FFmpeg ApplyRadioEffect: running command '{ffmpeg.FileName} {ffmpeg.Arguments}'");
                 using var process = Process.Start(ffmpeg)!;
                 var stdoutTask = process.StandardOutput.ReadToEndAsync();
                 var stderrTask = process.StandardError.ReadToEndAsync();

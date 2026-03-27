@@ -130,9 +130,12 @@ public sealed class TTSManager
         var cachedData = await TryGetCached(key);
         if (cachedData != null)
         {
+            _sawmill.Debug($"ConvertTextToSpeech: cache hit for '{text}'");
             ReusedCount.Inc();
             return cachedData;
         }
+
+        _sawmill.Debug($"ConvertTextToSpeech: cache miss for '{text}', calling API");
 
         // TODO:
         // Instead of just incrementing a integer, we should really keep track of what text + voice is in queue to be generated
@@ -149,26 +152,37 @@ public sealed class TTSManager
 
         try
         {
+            _sawmill.Debug($"ConvertTextToSpeech: waiting for semaphore (queued={_queuedGenerations})");
             await _generationSemaphore.WaitAsync();
+            _sawmill.Debug("ConvertTextToSpeech: semaphore acquired");
             var reqTime = DateTime.UtcNow;
 
             try
             {
                 using var client = new HttpClient();
 
-                var requestUrl = $"http://localhost:8004/v1/audio/speech";
+                var requestUrl = $"http://localhost:8004/tts";
 
-                // JSON payload for Chatterbox TTS
+                // JSON payload for Chatterbox TTS (Custom Endpoint)
                 var payload = new
                 {
-                    model = "turbo",
-                    input = text,
-                    voice = speaker + ".wav",
-                    response_format = "opus",
-                    speed = 1
+                    text = text,
+                    voice_mode = "predefined",
+                    predefined_voice_id = speaker + ".wav",
+                    output_format = "opus",
+                    temperature = _cfg.GetCVar(GoobCVars.TTSTemperature),
+                    // exaggeration = _cfg.GetCVar(GoobCVars.TTSExaggeration), // Not supported by Turbo
+                    // cfg_weight = _cfg.GetCVar(GoobCVars.TTSCfgWeight), // Not supported by Turbo
+                    seed = _cfg.GetCVar(GoobCVars.TTSSeed) == 0 ? (int?)null : _cfg.GetCVar(GoobCVars.TTSSeed),
+                    speed_factor = _cfg.GetCVar(GoobCVars.TTSSpeedFactor),
+                    language = _cfg.GetCVar(GoobCVars.TTSLanguage),
+                    split_text = _cfg.GetCVar(GoobCVars.TTSSplitText),
+                    chunk_size = _cfg.GetCVar(GoobCVars.TTSChunkSize)
                 };
 
+                _sawmill.Debug($"ConvertTextToSpeech: API request sent to {requestUrl}, status={payload}");
                 var response = await client.PostAsJsonAsync(requestUrl, payload);
+                _sawmill.Debug($"ConvertTextToSpeech: API response received, status={response.StatusCode}");
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -178,9 +192,12 @@ public sealed class TTSManager
                 }
 
                 var audioBytes = await response.Content.ReadAsByteArrayAsync();
+                _sawmill.Debug($"ConvertTextToSpeech: received {audioBytes.Length} bytes from API");
 
                 // Convert TTS to .ogg file for compatability
+                _sawmill.Debug("ConvertTextToSpeech: converting audio to OGG");
                 audioBytes = await AudioConverter.ConvertToOggAsync(audioBytes);
+                _sawmill.Debug($"ConvertTextToSpeech: conversion complete, final size={audioBytes.Length} bytes");
 
                 TryCache(key, audioBytes);
                 RequestTimings.WithLabels("API").Observe((DateTime.UtcNow - reqTime).TotalSeconds);

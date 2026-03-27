@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Content.Server.Chat.Systems;
 using Content.Server.Radio.EntitySystems;
 using Content.Shared._Goobstation.CCVars;
@@ -79,6 +79,7 @@ public sealed partial class TTSSystem : EntitySystem
 
         var previewText = _rng.Pick(_sampleText);
         var soundData = await GenerateTTS(previewText, protoVoice.Model, protoVoice.Speaker);
+        _sawmill.Debug($"OnRequestPreviewTTS: generated preview for voice '{ev.VoiceId}', text length={previewText.Length}, success={soundData != null}");
         if (soundData is null)
             return;
 
@@ -105,10 +106,12 @@ public sealed partial class TTSSystem : EntitySystem
 
         if (args.IsWhisper)
         {
+            _sawmill.Debug($"OnEntitySpoke: handling whisper from {uid}, voice={voiceId}, length={args.Message.Length}");
             HandleWhisper(uid, args.Message, protoVoice.Model, protoVoice.Speaker);
             return;
         }
 
+        _sawmill.Debug($"OnEntitySpoke: handling say from {uid}, voice={voiceId}, length={args.Message.Length}");
         HandleSay(uid, args.Message, protoVoice.Model, protoVoice.Speaker);
     }
 
@@ -144,6 +147,7 @@ public sealed partial class TTSSystem : EntitySystem
                 return;
 
             var ttsEvent = new PlayTTSEvent(radioAudio, GetNetEntity(source), isRadio: true);
+            _sawmill.Debug($"ProcessRadioTTS: raising PlayTTSEvent for {source}, audio size={radioAudio.Length}, recipients={sessions.Count}");
             foreach (var session in sessions)
                 RaiseNetworkEvent(ttsEvent, session);
         }
@@ -155,6 +159,7 @@ public sealed partial class TTSSystem : EntitySystem
     private async void HandleSay(EntityUid uid, string message, string model, string speaker)
     {
         var soundData = await GenerateTTS(message, model, speaker);
+        _sawmill.Debug($"HandleSay: generated TTS for {uid}, success={soundData != null}");
         if (soundData is null)
             return;
         RaiseNetworkEvent(new PlayTTSEvent(soundData, GetNetEntity(uid)), Filter.Pvs(uid));

@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using Content.Shared._Goobstation.CCVars;
 using Content.Shared.TTS;
 using Robust.Client.Audio;
@@ -65,7 +65,7 @@ public sealed class TTSSystem : EntitySystem
 
     private void OnPlayTTS(PlayTTSEvent ev)
     {
-        _sawmill.Verbose($"Play TTS audio {ev.Data.Length} bytes from {ev.SourceUid} entity");
+        _sawmill.Debug($"OnPlayTTS: received {ev.Data.Length} bytes from source {ev.SourceUid}, isRadio={ev.IsRadio}, isWhisper={ev.IsWhisper}");
 
         // Ensure that the data is not empty
         if (ev.Data.Length == 0)
