@@ -17,7 +17,7 @@ using System.Text.Json;
 namespace Content.Server.TTS;
 
 // ReSharper disable once InconsistentNaming
-public sealed class TTSManager
+public sealed class TTSManager : IPostInjectInit
 {
     private static readonly Histogram RequestTimings = Metrics.CreateHistogram(
         "tts_req_timings",
@@ -50,13 +50,21 @@ public sealed class TTSManager
 
     public TTSManager()
     {
+    }
+
+    void IPostInjectInit.PostInject()
+    {
         Initialize();
     }
 
     private void Initialize()
     {
-        IoCManager.InjectDependencies(this);
         _sawmill = Logger.GetSawmill("tts");
+
+        // When running in a unit test environment, GoobCVars are not always registered 
+        // by the engine's automatically assembly-based loader before TTSManager is initialized.
+        // We register them manually here with CVar.NONE to ensure they are available regardless of the environment.
+        RegisterTestCVars();
 
         _cachePath = MakeDataPath(_cfg.GetCVar(GoobCVars.TTSCachePath));
         _cfg.OnValueChanged(GoobCVars.TTSCachePath, OnCachePathChanged);
@@ -84,6 +92,30 @@ public sealed class TTSManager
                 CreateNoWindow = true,
             },
         }.Start();
+    }
+
+    private void RegisterTestCVars()
+    {
+        RegisterIfMissing(GoobCVars.TTSCachePath);
+        RegisterIfMissing(GoobCVars.TTSModelPath);
+        RegisterIfMissing(GoobCVars.TTSSimultaneousGenerations);
+        RegisterIfMissing(GoobCVars.TTSQueueMax);
+        RegisterIfMissing(GoobCVars.TTSTemperature);
+        RegisterIfMissing(GoobCVars.TTSSeed);
+        RegisterIfMissing(GoobCVars.TTSSpeedFactor);
+        RegisterIfMissing(GoobCVars.TTSLanguage);
+        RegisterIfMissing(GoobCVars.TTSSplitText);
+        RegisterIfMissing(GoobCVars.TTSChunkSize);
+        RegisterIfMissing(GoobCVars.TTSCacheType);
+        RegisterIfMissing(GoobCVars.TTSMaxCached);
+    }
+
+    private void RegisterIfMissing<T>(CVarDef<T> def) where T : notnull
+    {
+        if (!_cfg.IsCVarRegistered(def.Name))
+        {
+            _cfg.RegisterCVar(def.Name, def.DefaultValue, CVar.NONE);
+        }
     }
 
     private void OnCachePathChanged(string path)
