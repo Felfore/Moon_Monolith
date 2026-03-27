@@ -21,10 +21,10 @@
   - type: Speech
     speechVerb: Rodentia
     speechSounds: Squeak
-  - type: CheeseAccent
     allowedEmotes:
     - Squeak
     - Belch # Frontier
+  - type: CheeseAccent
   - type: Fixtures
     fixtures: # TODO: This needs a second fixture just for mob collisions.
       fix1:

@@ -50,9 +50,9 @@
     materialComposition:
       Steel: 75
       Plastic: 25
-  # Goobstation
-  - type: Tool
-    qualities:
-    - Painting
+  # # Goobstation
+  # - type: Tool
+  #   qualities:
+  #   - Painting
   - type: AutoRecharge
     rechargeDuration: 1
