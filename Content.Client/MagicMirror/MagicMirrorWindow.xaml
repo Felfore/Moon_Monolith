@@ -5,5 +5,11 @@
     <BoxContainer>
         <humanoid:SingleMarkingPicker Name="HairPicker" Category="Hair" />
         <humanoid:SingleMarkingPicker Name="FacialHairPicker" Category="FacialHair" />
+        <BoxContainer Orientation="Vertical" Name="VoiceContainer" Margin="10" MinWidth="150">
+            <Label Text="{Loc 'humanoid-profile-editor-voice-label'}" HorizontalAlignment="Center" />
+            <OptionButton Name="VoiceButton" HorizontalExpand="True" />
+            <Button Name="VoicePlayButton" Text="{Loc 'humanoid-profile-editor-voice-play'}" HorizontalExpand="True" />
+        </BoxContainer>
+        <Label Name="NoOptionsLabel" Text="{Loc 'magic-mirror-component-activate-user-has-no-hair'}" Visible="False" HorizontalAlignment="Center" VerticalAlignment="Center" />
     </BoxContainer>
 </DefaultWindow>

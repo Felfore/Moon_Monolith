@@ -44,6 +44,12 @@ public sealed partial class MagicMirrorComponent : Component
     public TimeSpan ChangeSlotTime = TimeSpan.FromSeconds(7);
 
     /// <summary>
+    /// Do after time to change a person's voice
+    /// </summary>
+    [DataField, ViewVariables(VVAccess.ReadWrite)]
+    public TimeSpan ChangeVoiceTime = TimeSpan.FromSeconds(2);
+
+    /// <summary>
     /// Sound emitted when slots are changed
     /// </summary>
     [DataField, ViewVariables(VVAccess.ReadWrite)]
