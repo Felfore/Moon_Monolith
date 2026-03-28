@@ -74,11 +74,12 @@ namespace Content.Server.TTS
                                 "equalizer=f=1500:width_type=o:width=1.5:g=8," +
                                 "acompressor=threshold=-12dB:ratio=8:attack=0.5:release=30:makeup=4," +
                                 "acrusher=level_in=2:level_out=1:bits=12:mode=lin:aa=1," +
-                                "aresample=44100," +
-                                "loudnorm=I=-16:TP=-1.5:LRA=11" +
+                                "aresample=44100" +
                                 "[radio];" +
                                 "aevalsrc=random(0)*0.04:sample_rate=44100[noise];" +
-                                "[radio][noise]amix=inputs=2:weights=1 0.1:duration=shortest[out]\" " +
+                                "[radio][noise]amix=inputs=2:weights=1 0.1:duration=shortest," +
+                                "dynaudnorm=f=150:g=15" +
+                                "[out]\" " +
                                 "-map \"[out]\" " +
                                 $"-c:a libvorbis \"{outputPath}\"",
                     UseShellExecute = false,
@@ -95,6 +96,12 @@ namespace Content.Server.TTS
 
                 var stdout = await stdoutTask;
                 var stderr = await stderrTask;
+
+                if (process.ExitCode != 0)
+                {
+                    Logger.GetSawmill("tts").Error($"FFmpeg ApplyRadioEffect failed with exit code {process.ExitCode}: {stderr}");
+                    throw new Exception($"FFmpeg radio effect failed: {stderr}");
+                }
 
                 if (!File.Exists(outputPath))
                     throw new Exception($"FFmpeg failed to produce an output file for radio effect. Exit code: {process.ExitCode}\nStdout: {stdout}\nStderr: {stderr}");

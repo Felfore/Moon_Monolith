@@ -228,3 +228,24 @@
   model: turbo
   sex: Male
   speaker: Snake
+
+- type: ttsVoice
+  id: Meow
+  name: Meow
+  model: turbo
+  sex: Male
+  speaker: Meow
+
+- type: ttsVoice
+  id: Meow
+  name: Meow
+  model: turbo
+  sex: Female
+  speaker: Meow
+
+- type: ttsVoice
+  id: Vyper
+  name: Vyper
+  model: turbo
+  sex: Female
+  speaker: Vyper
