@@ -250,3 +250,10 @@
   model: turbo
   sex: Female
   speaker: Vyper
+
+- type: ttsVoice
+  id: Revy
+  name: Revy
+  model: turbo
+  sex: Female
+  speaker: Revy

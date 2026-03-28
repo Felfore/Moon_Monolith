@@ -1,12 +1,24 @@
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.MagicMirror;
+using Content.Shared.TTS;
+using Content.Client.TTS;
 using Robust.Client.GameObjects;
+using Robust.Client.Player;
+using Content.Shared.Humanoid.Markings;
+using Content.Shared.MagicMirror;
+using Content.Shared.TTS;
+using Content.Client.TTS;
+using Robust.Client.GameObjects;
+using Robust.Client.Player;
 using Robust.Client.UserInterface;
 
 namespace Content.Client.MagicMirror;
 
 public sealed class MagicMirrorBoundUserInterface : BoundUserInterface
 {
+    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private readonly IEntityManager _entManager = default!;
+
     [ViewVariables]
     private MagicMirrorWindow? _window;
 
@@ -30,6 +42,9 @@ public sealed class MagicMirrorBoundUserInterface : BoundUserInterface
             args => ChangeColor(MagicMirrorCategory.FacialHair, args.marking, args.slot);
         _window.OnFacialHairSlotAdded += delegate () { AddSlot(MagicMirrorCategory.FacialHair); };
         _window.OnFacialHairSlotRemoved += args => RemoveSlot(MagicMirrorCategory.FacialHair, args);
+
+        _window.OnVoiceSelected += voice => SendMessage(new MagicMirrorChangeVoiceMessage(voice));
+        _window.OnVoicePreview += voice => _entManager.System<TTSSystem>().RequestPreviewTTS(voice);
     }
 
     private void SelectHair(MagicMirrorCategory category, string marking, int slot)
@@ -61,7 +76,7 @@ public sealed class MagicMirrorBoundUserInterface : BoundUserInterface
             return;
         }
 
-        _window.UpdateState(data);
+        var isTarget = _entManager.GetEntity(data.Target) == _playerManager.LocalSession?.AttachedEntity;
+        _window.UpdateState(data, isTarget);
     }
 }
-

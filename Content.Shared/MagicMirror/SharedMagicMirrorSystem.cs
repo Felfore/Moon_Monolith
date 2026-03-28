@@ -2,6 +2,7 @@ using Content.Shared.DoAfter;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Interaction;
+using Content.Shared.TTS;
 using Content.Shared.UserInterface;
 using Robust.Shared.Serialization;
 
@@ -79,7 +80,10 @@ public abstract class SharedMagicMirrorSystem : EntitySystem
             hair,
             humanoid.MarkingSet.PointsLeft(MarkingCategories.Hair) + hair.Count,
             facialHair,
-            humanoid.MarkingSet.PointsLeft(MarkingCategories.FacialHair) + facialHair.Count);
+            humanoid.MarkingSet.PointsLeft(MarkingCategories.FacialHair) + facialHair.Count,
+            TryComp<TTSComponent>(targetUid, out var tts) ? tts.VoicePrototypeId : null);
+
+        state.Target = GetNetEntity(targetUid);
 
         // TODO: Component states
         component.Target = targetUid;
@@ -169,15 +173,27 @@ public sealed class MagicMirrorAddSlotMessage : BoundUserInterfaceMessage
 }
 
 [Serializable, NetSerializable]
+public sealed class MagicMirrorChangeVoiceMessage : BoundUserInterfaceMessage
+{
+    public MagicMirrorChangeVoiceMessage(string voice)
+    {
+        Voice = voice;
+    }
+
+    public string Voice { get; }
+}
+
+[Serializable, NetSerializable]
 public sealed class MagicMirrorUiState : BoundUserInterfaceState
 {
-    public MagicMirrorUiState(string species, List<Marking> hair, int hairSlotTotal, List<Marking> facialHair, int facialHairSlotTotal)
+    public MagicMirrorUiState(string species, List<Marking> hair, int hairSlotTotal, List<Marking> facialHair, int facialHairSlotTotal, string? voice)
     {
         Species = species;
         Hair = hair;
         HairSlotTotal = hairSlotTotal;
         FacialHair = facialHair;
         FacialHairSlotTotal = facialHairSlotTotal;
+        Voice = voice;
     }
 
     public NetEntity Target;
@@ -189,6 +205,8 @@ public sealed class MagicMirrorUiState : BoundUserInterfaceState
 
     public List<Marking> FacialHair;
     public int FacialHairSlotTotal;
+
+    public string? Voice;
 }
 
 [Serializable, NetSerializable]
@@ -223,4 +241,11 @@ public sealed partial class MagicMirrorChangeColorDoAfterEvent : DoAfterEvent
     public MagicMirrorCategory Category;
     public int Slot;
     public List<Color> Colors = new List<Color>();
+}
+
+[Serializable, NetSerializable]
+public sealed partial class MagicMirrorChangeVoiceDoAfterEvent : DoAfterEvent
+{
+    public override DoAfterEvent Clone() => this;
+    public string Voice = string.Empty;
 }

@@ -4,6 +4,7 @@ magic-mirror-window-title = Magic Mirror
 magic-mirror-add-slot-self = You're giving yourself some hair.
 magic-mirror-remove-slot-self = You're removing some of your hair.
 magic-mirror-change-slot-self = You're changing your hairstyle.
+magic-mirror-change-voice-self = You're changing your voice.
 magic-mirror-change-color-self = You're changing your hair color.
 
 magic-mirror-add-slot-target = Hair is being added to you by {$user}.
