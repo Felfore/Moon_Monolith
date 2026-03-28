@@ -6,6 +6,11 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
 
+<<<<<<< Updated upstream
+=======
+using Content.Shared.Preferences;
+
+>>>>>>> Stashed changes
 namespace Content.Shared.Humanoid;
 
 [NetworkedComponent, RegisterComponent, AutoGenerateComponentState(true)]
@@ -46,6 +51,19 @@ public sealed partial class HumanoidAppearanceComponent : Component
     [DataField(required: true), AutoNetworkedField]
     public ProtoId<SpeciesPrototype> Species { get; set; }
 
+<<<<<<< Updated upstream
+=======
+    // TTS-Start
+    /// <summary>
+    ///     Current voice. Used for correct cloning.
+    ///     Stores the voice ID as a plain string matching the filename
+    ///     in the Chatterbox voices folder (without extension).
+    /// </summary>
+    [DataField("voice")]
+    public string Voice { get; set; } = SharedHumanoidAppearanceSystem.DefaultVoice;
+    // TTS-End
+
+>>>>>>> Stashed changes
     /// <summary>
     ///     The initial profile and base layers to apply to this humanoid.
     /// </summary>

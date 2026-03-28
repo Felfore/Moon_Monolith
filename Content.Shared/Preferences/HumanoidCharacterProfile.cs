@@ -36,10 +36,6 @@ namespace Content.Shared.Preferences
 
         public const int DefaultBalance = 75000;
 
-        //private readonly Dictionary<string, JobPriority> _jobPriorities; // Frontier: commented out during merge.
-        //private readonly List<string> _antagPreferences; // Frontier: commented out during merge.
-        //private readonly List<string> _traitPreferences; // Frontier: commented out during merge.
-
         /// <summary>
         /// Job preferences for initial spawn.
         /// </summary>
@@ -87,6 +83,12 @@ namespace Content.Shared.Preferences
         public ProtoId<SpeciesPrototype> Species { get; set; } = SharedHumanoidAppearanceSystem.DefaultSpecies;
 
         [DataField]
+<<<<<<< Updated upstream
+=======
+        public string Voice { get; set; } = SharedHumanoidAppearanceSystem.DefaultVoice;
+
+        [DataField]
+>>>>>>> Stashed changes
         public int Age { get; set; } = 18;
 
         [DataField]
@@ -256,7 +258,7 @@ namespace Content.Shared.Preferences
             if (prototypeManager.TryIndex<SpeciesPrototype>(species, out var speciesPrototype))
             {
                 sex = random.Pick(speciesPrototype.Sexes);
-                age = random.Next(speciesPrototype.MinAge, speciesPrototype.OldAge); // people don't look and keep making 119 year old characters with zero rp, cap it at middle aged
+                age = random.Next(speciesPrototype.MinAge, speciesPrototype.OldAge);
             }
 
             var gender = Gender.Epicene;
@@ -272,6 +274,9 @@ namespace Content.Shared.Preferences
             }
 
             var name = GetName(species, gender);
+
+            // Voice is assigned dynamically at runtime from the Chatterbox server.
+            // Use the default voice as a placeholder; the player will select their own.
             return new HumanoidCharacterProfile()
             {
                 Name = name,
@@ -280,6 +285,7 @@ namespace Content.Shared.Preferences
                 Gender = gender,
                 Species = species,
                 Appearance = HumanoidCharacterAppearance.Random(species, sex),
+                Voice = SharedHumanoidAppearanceSystem.DefaultVoice,
             };
         }
 
@@ -551,7 +557,7 @@ namespace Content.Shared.Preferences
                 _ => Sex.Male // Invalid enum values.
             };
 
-            // ensure the species can be that sex and their age fits the founds
+            // ensure the species can be that sex and their age fits the bounds
             if (!speciesPrototype.Sexes.Contains(sex))
                 sex = speciesPrototype.Sexes[0];
 
@@ -582,17 +588,17 @@ namespace Content.Shared.Preferences
 
             name = name.Trim();
 
+<<<<<<< Updated upstream
+=======
+            // Voice is now a plain string ID matching a Chatterbox voice filename.
+            // If empty or null, fall back to the default voice.
+            if (string.IsNullOrWhiteSpace(Voice))
+                Voice = SharedHumanoidAppearanceSystem.DefaultVoice;
+
+>>>>>>> Stashed changes
             if (configManager.GetCVar(CCVars.RestrictedNames) && Species != "IPC")
             {
                 name = Regex.Replace(name, @"[^\u0041-\u005A,\u0061-\u007A,\u00C0-\u00D6,\u00D8-\u00F6,\u00F8-\u00FF,\u0100-\u017F, -]", string.Empty);
-                /*
-                 * 0041-005A  Basic Latin: Uppercase Latin Alphabet
-                 * 0061-007A  Basic Latin: Lowercase Latin Alphabet
-                 * 00C0-00D6  Latin-1 Supplement: Letters I
-                 * 00D8-00F6  Latin-1 Supplement: Letters II
-                 * 00F8-00FF  Latin-1 Supplement: Letters III
-                 * 0100-017F  Latin Extended A: European Latin
-                 */
             }
 
             if (configManager.GetCVar(CCVars.ICNameCase))
@@ -617,7 +623,7 @@ namespace Content.Shared.Preferences
             }
 
             // Frontier
-            //make sure theres no funny bank stuff going on
+            // make sure theres no funny bank stuff going on
             var bankBalance = BankBalance;
             if (BankBalance <= 0)
             {
@@ -770,7 +776,7 @@ namespace Content.Shared.Preferences
         }
 
         // sorry this is kind of weird and duplicated,
-        /// working inside these non entity systems is a bit wack
+        // working inside these non entity systems is a bit wack
         public static string GetName(string species, Gender gender)
         {
             var namingSystem = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<NamingSystem>();

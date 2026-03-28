@@ -1605,6 +1605,9 @@ namespace Content.Client.Lobby.UI
 
             _loadoutWindow?.Dispose();
             _loadoutWindow = null;
+
+            if (_dynamicVoiceSys != null)
+                _dynamicVoiceSys.VoiceListUpdated -= OnVoiceListUpdated;
         }
 
         protected override void EnteredTree()
