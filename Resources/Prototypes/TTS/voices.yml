@@ -1,3 +1,12 @@
+# TTS Voice Prototype Template:
+# - type: ttsVoice
+#   id: InternalID (Unique string)
+#   name: DisplayName (Can be a raw string or a localization key)
+#   model: turbo (Current standard model)
+#   sex: [Male | Female | Unsexed] (Optional, defaults to Unsexed if omitted)
+#   speaker: API speaker name/ID (Determines the actual voice used)
+#   canSelect: true (Optional, whether players can pick it in the character menu, defaults to true)
+
 - type: ttsVoice
   id: Abigail
   name: Abigail
@@ -233,14 +242,6 @@
   id: Meow
   name: Meow
   model: turbo
-  sex: Male
-  speaker: Meow
-
-- type: ttsVoice
-  id: Meow
-  name: Meow
-  model: turbo
-  sex: Female
   speaker: Meow
 
 - type: ttsVoice

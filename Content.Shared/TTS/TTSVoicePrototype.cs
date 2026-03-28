@@ -14,8 +14,8 @@ public sealed partial class TTSVoicePrototype : IPrototype
     [DataField("name")]
     public string Name { get; private set; } = string.Empty;
 
-    [DataField(required: true)]
-    public Sex Sex;
+    [DataField]
+    public Sex Sex = Sex.Unsexed;
 
     [DataField(required: true)]
     public string Model = string.Empty;

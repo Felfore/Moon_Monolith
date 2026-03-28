@@ -1,5 +1,6 @@
-﻿using System.Linq;
+using System.Linq;
 using Content.Client.TTS;
+using Content.Shared.Humanoid;
 using Content.Shared.Preferences;
 using Content.Shared.TTS;
 using Robust.Shared.Random;
@@ -33,11 +34,19 @@ public sealed partial class HumanoidProfileEditor
         _voiceList = _prototypeManager
             .EnumeratePrototypes<TTSVoicePrototype>()
             .Where(o => o.CanSelect)
-            .OrderBy(o => Loc.GetString(o.Name))
+            .OrderBy(o => o.Sex)
+            .ThenBy(o => Loc.GetString(o.Name))
             .ToList();
 
         VoiceButton.OnItemSelected += args =>
         {
+            if (args.Id < 0)
+            {
+                var currentVoiceId = _voiceList.FindIndex(x => x.ID == Profile?.Voice);
+                VoiceButton.SelectId(currentVoiceId);
+                return;
+            }
+
             VoiceButton.SelectId(args.Id);
             SetVoice(_voiceList[args.Id].ID);
         };
@@ -52,19 +61,31 @@ public sealed partial class HumanoidProfileEditor
 
         VoiceButton.Clear();
 
-        var firstVoiceChoiceId = 1;
+        var firstVoiceChoiceId = 0;
+        Sex? lastSex = null;
         for (var i = 0; i < _voiceList.Count; i++)
         {
             var voice = _voiceList[i];
-            if (!HumanoidCharacterProfile.CanHaveVoice(voice, Profile.Sex))
-                continue;
+
+            if (lastSex != voice.Sex)
+            {
+                var categoryLoc = voice.Sex switch
+                {
+                    Sex.Male => "humanoid-profile-editor-voice-category-masculine",
+                    Sex.Female => "humanoid-profile-editor-voice-category-feminine",
+                    _ => "humanoid-profile-editor-voice-category-unsexed"
+                };
+                
+                // Use unique negative IDs for headers and disable them
+                var headerId = -(int)voice.Sex - 1;
+                VoiceButton.AddItem(Loc.GetString(categoryLoc), headerId);
+                VoiceButton.SetItemDisabled(VoiceButton.ItemCount - 1, true);
+                
+                lastSex = voice.Sex;
+            }
 
             var name = Loc.GetString(voice.Name);
             VoiceButton.AddItem(name, i);
-
-            if (firstVoiceChoiceId == 1)
-                firstVoiceChoiceId = i;
-
         }
 
         var voiceChoiceId = _voiceList.FindIndex(x => x.ID == Profile.Voice);
