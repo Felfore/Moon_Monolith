@@ -34,6 +34,7 @@ public sealed partial class TTSSystem
         text = Regex.Replace(text, @"!{2,}", "!");     // Multiple exclamation marks to singular
         text = Regex.Replace(text, @"\?{2,}", "?");    // Multiple question marks to singular
         text = Regex.Replace(text, @"\.{4,}", "...");   // Sequences of 4+ dots to standard ellipsis
+        text = Regex.Replace(text, @"['’]{2,}", "'");  // Multiple apostrophes to singular
 
         // Squash any other repeating characters (except digits or dots) to a maximum of 2
         // This handles "text screaming" (e.g., "Heeeeeellooooo") while preserving double letters.

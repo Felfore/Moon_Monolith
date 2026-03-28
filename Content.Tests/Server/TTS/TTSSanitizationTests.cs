@@ -55,6 +55,8 @@ namespace Content.Tests.Server.TTS
         [TestCase("Pause..", "Pause..")]
         [TestCase("Ellipsis...", "Ellipsis...")]
         [TestCase("Mixed!?!?", "Mixed!?!?")]
+        [TestCase("I''''m", "I'm")]
+        [TestCase("Curly’’’s", "Curly's")]
         public void TestPunctuationSquashing(string input, string expected)
         {
             var result = TTSSystem.Sanitize(input);

@@ -29,6 +29,7 @@ The `TTSSystem` handles the logic for preparing raw chat messages for synthesis.
         6. **Punctuation Squashing**:
             - Squashes sequences of 2 or more `!` into a single `!`.
             - Squashes sequences of 2 or more `?` into a single `?`.
+            - Squashes sequences of 2 or more `'` or `’` (apostrophes) into a single `'`.
             - Squashes sequences of 4 or more `.` into a single ellipsis `...`.
             - *Note*: Sequences of 2 or 3 dots are preserved for brief pauses.
         7. **Global De-Spamming**:
