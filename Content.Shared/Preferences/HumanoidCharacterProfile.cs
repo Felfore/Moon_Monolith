@@ -601,7 +601,7 @@ namespace Content.Shared.Preferences
             name = name.Trim();
 
             prototypeManager.TryIndex<TTSVoicePrototype>(Voice, out var voice);
-            if (voice is null || !CanHaveVoice(voice, Sex))
+            if (voice is null || !voice.CanSelect)
                 Voice = SharedHumanoidAppearanceSystem.DefaultSexVoice[sex];
 
             if (configManager.GetCVar(CCVars.RestrictedNames) && Species != "IPC")
@@ -747,7 +747,7 @@ namespace Content.Shared.Preferences
 
         public static bool CanHaveVoice(TTSVoicePrototype voice, Sex sex)
         {
-            return voice.CanSelect && sex == Sex.Unsexed || (voice.Sex == sex || voice.Sex == Sex.Unsexed);
+            return voice.CanSelect;
         }
 
 
