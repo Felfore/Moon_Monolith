@@ -10,6 +10,7 @@ using Content.Shared.Inventory;
 using Content.Shared.MagicMirror;
 using Content.Shared.Popups;
 using Content.Shared.Tag;
+using Content.Shared.TTS;
 using Robust.Shared.Audio.Systems;
 
 namespace Content.Server.MagicMirror;
@@ -39,13 +40,14 @@ public sealed class MagicMirrorSystem : SharedMagicMirrorSystem
             subs.Event<MagicMirrorChangeColorMessage>(OnTryMagicMirrorChangeColor);
             subs.Event<MagicMirrorAddSlotMessage>(OnTryMagicMirrorAddSlot);
             subs.Event<MagicMirrorRemoveSlotMessage>(OnTryMagicMirrorRemoveSlot);
+            subs.Event<MagicMirrorChangeVoiceMessage>(OnTryMagicMirrorChangeVoice);
         });
-
 
         SubscribeLocalEvent<MagicMirrorComponent, MagicMirrorSelectDoAfterEvent>(OnSelectSlotDoAfter);
         SubscribeLocalEvent<MagicMirrorComponent, MagicMirrorChangeColorDoAfterEvent>(OnChangeColorDoAfter);
         SubscribeLocalEvent<MagicMirrorComponent, MagicMirrorRemoveSlotDoAfterEvent>(OnRemoveSlotDoAfter);
         SubscribeLocalEvent<MagicMirrorComponent, MagicMirrorAddSlotDoAfterEvent>(OnAddSlotDoAfter);
+        SubscribeLocalEvent<MagicMirrorComponent, MagicMirrorChangeVoiceDoAfterEvent>(OnChangeVoiceDoAfter);
     }
 
     private void OnMagicMirrorSelect(EntityUid uid, MagicMirrorComponent component, MagicMirrorSelectMessage message)
@@ -104,6 +106,8 @@ public sealed class MagicMirrorSystem : SharedMagicMirrorSystem
 
     private void OnSelectSlotDoAfter(EntityUid uid, MagicMirrorComponent component, MagicMirrorSelectDoAfterEvent args)
     {
+        component.DoAfter = null;
+
         if (args.Handled || args.Target == null || args.Cancelled)
             return;
 
@@ -182,6 +186,8 @@ public sealed class MagicMirrorSystem : SharedMagicMirrorSystem
     }
     private void OnChangeColorDoAfter(EntityUid uid, MagicMirrorComponent component, MagicMirrorChangeColorDoAfterEvent args)
     {
+        component.DoAfter = null;
+
         if (args.Handled || args.Target == null || args.Cancelled)
             return;
 
@@ -262,6 +268,8 @@ public sealed class MagicMirrorSystem : SharedMagicMirrorSystem
 
     private void OnRemoveSlotDoAfter(EntityUid uid, MagicMirrorComponent component, MagicMirrorRemoveSlotDoAfterEvent args)
     {
+        component.DoAfter = null;
+
         if (args.Handled || args.Target == null || args.Cancelled)
             return;
 
@@ -339,6 +347,8 @@ public sealed class MagicMirrorSystem : SharedMagicMirrorSystem
     }
     private void OnAddSlotDoAfter(EntityUid uid, MagicMirrorComponent component, MagicMirrorAddSlotDoAfterEvent args)
     {
+        component.DoAfter = null;
+
         if (args.Handled || args.Target == null || args.Cancelled || !TryComp(component.Target, out HumanoidAppearanceComponent? humanoid))
             return;
 
@@ -365,6 +375,50 @@ public sealed class MagicMirrorSystem : SharedMagicMirrorSystem
 
         UpdateInterface(uid, component.Target.Value, component);
 
+    }
+
+    private void OnTryMagicMirrorChangeVoice(EntityUid uid, MagicMirrorComponent component, MagicMirrorChangeVoiceMessage message)
+    {
+        if (component.Target is not { } target || target != message.Actor)
+            return;
+
+        _doAfterSystem.Cancel(component.DoAfter);
+        component.DoAfter = null;
+
+        var doAfter = new MagicMirrorChangeVoiceDoAfterEvent()
+        {
+            Voice = message.Voice,
+        };
+
+        _doAfterSystem.TryStartDoAfter(new DoAfterArgs(EntityManager, message.Actor, component.ChangeVoiceTime, doAfter, uid, target: target, used: uid)
+        {
+            BreakOnDamage = true,
+            BreakOnMove = true,
+            NeedHand = true,
+        },
+            out var doAfterId);
+
+        _popup.PopupEntity(Loc.GetString("magic-mirror-change-voice-self"), target, target, PopupType.Medium);
+
+        component.DoAfter = doAfterId;
+        _audio.PlayPvs(component.ChangeHairSound, uid);
+    }
+
+    private void OnChangeVoiceDoAfter(EntityUid uid, MagicMirrorComponent component, MagicMirrorChangeVoiceDoAfterEvent args)
+    {
+        component.DoAfter = null;
+
+        if (args.Handled || args.Target == null || args.Cancelled)
+            return;
+
+        if (component.Target != args.Target)
+            return;
+
+        var tts = EnsureComp<TTSComponent>(args.Target.Value);
+        tts.VoicePrototypeId = args.Voice;
+        Dirty(args.Target.Value, tts);
+
+        UpdateInterface(uid, args.Target.Value, component);
     }
 
     private void OnUiClosed(Entity<MagicMirrorComponent> ent, ref BoundUIClosedEvent args)
