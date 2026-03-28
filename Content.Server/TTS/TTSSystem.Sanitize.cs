@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using System.Text.RegularExpressions;
 using Content.Server.Chat.Systems;
 
@@ -14,13 +14,31 @@ public sealed partial class TTSSystem
         args.Message = args.Message.Replace("+", "");
     }
 
-    private static string Sanitize(string text)
+    internal static string Sanitize(string text)
     {
         text = text.Trim();
-        text = Regex.Replace(text, @"[^a-zA-Zа-яА-ЯёЁ0-9-Є-ЯҐа-їґ,\-+?!. ]", "");
+
+        // Strip characters that are not explicitly permitted for the TTS engine
+        text = Regex.Replace(text, @"[^a-zA-Zа-яА-ЯёЁ0-9-Є-ЯҐа-їґ,\-+?!. '’]", "");
+
+        // Pass whole words through a phonetic replacement dictionary
         text = Regex.Replace(text, "(?<![a-zA-Zа-яёА-ЯЁ-Є-ЯҐа-їґ])[a-zA-Zа-яёА-ЯЁ-Є-ЯҐа-їґ]+?(?![a-zA-Zа-яёА-ЯЁ-Є-ЯҐа-їґ])", ReplaceMatchedWord, RegexOptions.Multiline | RegexOptions.IgnoreCase);
+
+        // Convert decimal punctuation (between digits) to spoken Ukrainian terms
         text = Regex.Replace(text, @"(?<=[1-90])(\.|,)(?=[1-90])", " цілих ");
+
+        // Convert sequences of digits into English words
         text = Regex.Replace(text, @"\d+", ReplaceWord2Num);
+
+        // Squash excessive punctuation while permitting standard ellipses (...)
+        text = Regex.Replace(text, @"!{2,}", "!");     // Multiple exclamation marks to singular
+        text = Regex.Replace(text, @"\?{2,}", "?");    // Multiple question marks to singular
+        text = Regex.Replace(text, @"\.{4,}", "...");   // Sequences of 4+ dots to standard ellipsis
+
+        // Squash any other repeating characters (except digits or dots) to a maximum of 2
+        // This handles "text screaming" (e.g., "Heeeeeellooooo") while preserving double letters.
+        text = Regex.Replace(text, @"([^0-9.])\1{2,}", "$1$1");
+
         text = text.Trim();
         return text;
     }
