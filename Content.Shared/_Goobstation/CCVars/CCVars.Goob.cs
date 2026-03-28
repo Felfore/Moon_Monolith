@@ -56,5 +56,32 @@ public sealed partial class GoobCVars
     public static readonly CVarDef<string> TTSModelPath =
         CVarDef.Create("tts.model_path", "data/tts/models", CVar.SERVERONLY);
 
+    public static readonly CVarDef<float> TTSTemperature =
+        CVarDef.Create("tts.temperature", 0.8f, CVar.SERVERONLY);
+
+    public static readonly CVarDef<float> TTSSpeedFactor =
+        CVarDef.Create("tts.speed_factor", 1.0f, CVar.SERVERONLY);
+
+/*  // Not supported by the Chatterbox Turbo model
+
+    public static readonly CVarDef<float> TTSExaggeration =
+        CVarDef.Create("tts.exaggeration", 1.0f, CVar.SERVERONLY);
+
+    public static readonly CVarDef<float> TTSCfgWeight =
+        CVarDef.Create("tts.cfg_weight", 2.0f, CVar.SERVERONLY);
+*/
+
+    public static readonly CVarDef<int> TTSSeed =
+        CVarDef.Create("tts.seed", 0, CVar.SERVERONLY);
+
+    public static readonly CVarDef<string> TTSLanguage =
+        CVarDef.Create("tts.language", "en", CVar.SERVERONLY);
+
+    public static readonly CVarDef<int> TTSChunkSize =
+        CVarDef.Create("tts.chunk_size", 120, CVar.SERVERONLY);
+
+    public static readonly CVarDef<bool> TTSSplitText =
+        CVarDef.Create("tts.split_text", true, CVar.SERVERONLY);
+
     #endregion
 }

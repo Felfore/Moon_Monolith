@@ -1627,6 +1627,7 @@ entities:
       parent: 1
     - type: PaintableAirlock
       department: null
+      group: Glass
 - proto: AirlockScienceGlass
   entities:
   - uid: 31

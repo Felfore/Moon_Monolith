@@ -81,17 +81,17 @@
       sprite: Objects/Misc/handcuffs.rsi
       state: body-overlay-2
       visible: false
-  - type: HumanoidAppearance
-    species: CP14Goblin
-    markingsDisplacement:
-      Hair:
-        sizeMaps:
-          32:
-            sprite: _CP14/Mobs/Species/Goblin/displacement.rsi
-            state: hair
-          48:
-            sprite: _CP14/Mobs/Species/Goblin/displacement48.rsi
-            state: hair
+  # - type: HumanoidAppearance
+  #   species: CP14Goblin
+  #   markingsDisplacement:
+  #     Hair:
+  #       sizeMaps:
+  #         32:
+  #           sprite: _CP14/Mobs/Species/Goblin/displacement.rsi
+  #           state: hair
+  #         48:
+  #           sprite: _CP14/Mobs/Species/Goblin/displacement48.rsi
+  #           state: hair
   - type: FireVisuals
     alternateState: Goblin_burning
   - type: Icon
@@ -159,7 +159,7 @@
           sprite: _CP14/Mobs/Species/Goblin/displacement.rsi
           state: hands
   - type: Inventory
-    #templateId: Human
+    #templateId: human
     #speciesId: goblin
     speciesId: human
     displacements:
@@ -238,19 +238,19 @@
   id: CP14MobGoblinDummy
   categories: [ HideSpawnMenu ]
   components:
-  - type: HumanoidAppearance
-    species: CP14Goblin
-    markingsDisplacement:
-      Hair:
-        sizeMaps:
-          32:
-            sprite: _CP14/Mobs/Species/Goblin/displacement.rsi
-            state: hair
-          48:
-            sprite: _CP14/Mobs/Species/Goblin/displacement48.rsi
-            state: hair
+  # - type: HumanoidAppearance
+  #   species: CP14Goblin
+  #   markingsDisplacement:
+  #     Hair:
+  #       sizeMaps:
+  #         32:
+  #           sprite: _CP14/Mobs/Species/Goblin/displacement.rsi
+  #           state: hair
+  #         48:
+  #           sprite: _CP14/Mobs/Species/Goblin/displacement48.rsi
+  #           state: hair
   - type: Inventory
-    templateId: Human
+    templateId: human
     speciesId: goblin
     displacements:
       belt:

@@ -12,9 +12,10 @@ public sealed partial class MarkingPoints
     public int Points = 0;
     [DataField("required", required: true)]
     public bool Required = false;
-    // Default markings for this layer.
     [DataField("defaultMarkings", customTypeSerializer:typeof(PrototypeIdListSerializer<MarkingPrototype>))]
     public List<string> DefaultMarkings = new();
+    [DataField("onlyWhitelisted")]
+    public bool OnlyWhitelisted = false;
 
     public static Dictionary<MarkingCategories, MarkingPoints> CloneMarkingPointDictionary(Dictionary<MarkingCategories, MarkingPoints> self)
     {
@@ -26,7 +27,8 @@ public sealed partial class MarkingPoints
             {
                 Points = points.Points,
                 Required = points.Required,
-                DefaultMarkings = points.DefaultMarkings
+                DefaultMarkings = points.DefaultMarkings,
+                OnlyWhitelisted = points.OnlyWhitelisted
             };
         }
 
